@@ -1,0 +1,77 @@
+body{
+    font-family: 'Josefin Sans';
+}
+
+#main-content{
+    
+    background: linear-gradient(rgba(0, 0, 0, .3), rgba(0,0,0,0.8)) ,url(../img/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.height{
+    min-height: calc(100vh - 131px);
+}
+
+.height-navbar{
+    min-height: calc(100vh - 131px - 48px);
+}
+
+#logo{
+    text-decoration: none;
+    color: white;
+}
+
+.brand{
+    font-size: 5rem;
+}
+
+.small-brand{
+    font-size: 2rem;
+}
+
+.line-height{
+    line-height: 1.5em;
+}
+
+.navbar-nav li:hover{
+    background-color: #007bff !important;
+}
+
+.navbar-item{
+    font-size: 0.8rem;
+}
+
+.navbar-item:hover a{
+    color: white !important;
+}
+
+.active{
+    color: #007bff !important;
+}
+
+.navbar-item{
+    min-height: 48px;
+}
+
+.width{
+    min-width: 46px !important;
+}
+
+@media screen and (max-width: 576px) {
+    #logo{
+        font-size: calc(7vw);
+    }
+    .brand{
+        font-size: calc(14vw);
+    }
+    header p.small{
+        font-size: calc(2.2vw);
+    }
+    header .row{
+        min-height: 0px !important;
+    }
+
+}

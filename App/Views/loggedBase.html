@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block logged %}
+
+<nav class="navbar navbar-light bg-light p-0 navbar-expand-lg main-navbar">
+    <button type="button" class="navbar-toggler m-1 order-first" data-toggle="collapse" data-target="#navbarLinks">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse " id="navbarLinks">
+        <ul class="navbar-nav mr-auto">
+            <li class="navbar-item pt-2">
+                <a href="/" class="nav-link {{ current_url == '/' or current_url == '/home/index' ? 'active' : '' }}"><i class="icon-home-1 mx-1"></i>Strona Główna</a>
+            </li>
+            <li class="navbar-item pt-2">
+                <a href="dodajPrzychod.php" class="nav-link {{ current_url == '/dodaj-przychod' ? 'active' : '' }}"><i class="icon-dollar mx-1"></i>Dodaj Przychód</a>
+            </li>
+            <li class="navbar-item pt-2">
+                <a href="dodajWydatek.php" class="nav-link"><i class="icon-basket mx-1"></i>Dodaj Wydatek</a>
+            </li>
+            <li class="navbar-item pt-2">
+                <a href="przegladajBilans.php" class="nav-link"><i class="icon-chart-bar mx-1"></i>Przeglądaj Bilans</a>
+            </li>
+            <li class="navbar-item pt-2">
+                <a href="ustwienia.php" class="nav-link"><i class="icon-cog mx-1"></i>Ustawienia</a>
+            </li>
+            <li class="navbar-item pt-2">
+                <a  href="/login/destroy" class="nav-link" id="logout-link"><i class="icon-logout mx-1"></i>Wyloguj się</a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-item text-primary mr-3 pt-1">
+    <p class="m-1 pt-2"><i class="icon-user mr-1 mb-0"></i>Zalogowany jako: {{ current_user.login }}</p>
+    </div>
+    </nav>
+
+{% endblock %}

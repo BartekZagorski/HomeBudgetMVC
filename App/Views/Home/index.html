@@ -1,0 +1,39 @@
+{% extends current_user ? "loggedBase.html" : "base.html" %}
+
+{% block main %}
+
+{% if not current_user %}
+<article class="py-5">
+    <div class="container">
+        <div class="row align-items-start justify-content-center">
+            <div class="col-lg-10 bg-primary rounded">
+                <h2 class="h6 text-light py-3 my-2 line-height">
+                    Witaj w <i class="icon-home small-brand"></i><strong>HomeBudget</strong> - aplikacji, która pomoże Ci zapanować nad domowymi finansami.
+                </h2>
+                <p class="text-justify mb-1 line-height">Masz problem z organizacją swoich finansów?</p>
+                    <p class="text-justify mb-1 line-height">Nie wiesz czy w danym okresie wychodzisz na plus czy na minus?</p>
+                    <p class="text-justify line-height">Gubisz się w swoich przychodach i wydatkach?</p>
+                    <p class="text-white text-justify mb-3">Skoro tak to ta aplikacja jest właśnie dla Ciebie. Dzięki Home Budget planowanie, organizacja, ewidencjonowanie swoich pieniędzy już nigdy nie będzie problemem, a Ty staniesz się mistrzem zarządzania!</p>
+            </div>
+            <div class="col-lg-10">
+                <div class="row align-items-start py-3">
+                    <div class="col-sm-6 mx-auto my-3">
+                        <p class="text-center text-light mb-1 my-2">
+                            Masz już konto?
+                        </p>
+                        <a href="/login/new" class="btn btn-success py-3 btn-block"><i class="icon-login mr-2"></i>Zaloguj się</a>
+                    </div>
+                    <div class="col-sm-6 mx-auto my-3">
+                        <p class="text-center text-light mb-1 my-2">
+                            Jesteś nowym użytkownikiem?
+                        </p>
+                        <a href="/register/new" class="btn btn-danger py-3 btn-block"><i class="icon-user-plus mr-2"></i>Zarejestruj się</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+{% endif %}
+
+{% endblock %}
