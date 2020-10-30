@@ -171,9 +171,18 @@ class User extends \Core\Model
         return $stmt->fetch();
     }
 
-    public function sendTestEmail()
+    public static function sendPasswordReset($email)
     {
-        Mail::send($this->email, 'Test', 'test', 'test');
+        $user = static::findByEmail($email);
+
+        if ($user)
+        {
+            echo "tutaj zaczniemy procedurę resetowania hasła gdyż mamy użytkownika";
+            /*if ($user->startPasswordReset())
+            {
+                $user->sendPasswordResetEmail();
+            }*/
+        }
     }
 
 }
