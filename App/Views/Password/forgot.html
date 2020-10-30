@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+    <article class="py-3">
+        <div class="container">
+            <div class="row align-items-start justify-content-center">
+                <div class="col-md-8 mx-auto py-4">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary py-2 text-light text-center ">
+                            <h3 class="h5 m-0">Odzyskiwanie hasła</h3>
+                        </div>
+                        <div class="card-body border-primary pt-3 pb-2">
+                            <form action="/password/request-reset" method="post">
+                                <div class="input-group mt-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text px-2">
+                                            <i class="icon-mail"></i>
+                                        </span>
+                                    </div>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="email" onfocus="this.placeholder=''" onblur="this.placeholder='email'" value="{{ user.email }}" required>
+                                </div>
+                                <div class="small my-1 text-danger">Należy podać adres email użyty do założenia konta.</div>
+                                <button type="submit" class="btn btn-outline-primary btn-block my-2 py-2"><i class="icon-lock mr-2"></i>Zresetuj hasło</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+{% endblock %}

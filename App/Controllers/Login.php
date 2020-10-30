@@ -22,7 +22,6 @@ class Login extends \Core\Controller
         if ($user)
         {
             Auth::login($user);
-            $user->sendTestEmail();
             $this->redirect('/');
             //$this->redirect(Auth::getReturnToPage());
         }
