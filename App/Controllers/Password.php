@@ -28,4 +28,59 @@ class Password extends \Core\Controller
         }
         else $this->redirect('/');
     }
+    public function resetAction()
+    {
+        $token = $this->route_params['token'];
+
+        $user = $this->getUserOrExit($token);
+
+        View::renderTemplate('Password/reset.html',
+        [
+            'token' => $token
+        ]);
+    }
+
+    public function resetPasswordAction()
+    {
+        $user = $this->getUserOrExit($_POST['token']);
+
+        if ($user->resetPassword($_POST['password'], $_POST['passwordConfirm']))
+        {
+            $_SESSION['resetSucceed'] = true;
+            $this->redirect('/password/reset-succeed');
+        }
+        else
+        {
+            View::renderTemplate('Password/reset.html',
+            [
+                'token' => $_POST['token'],
+                'user' => $user
+            ]);
+        }
+    }
+
+    protected function getUserOrExit($token)
+    {
+        $user = User::findByPasswordReset($token);
+
+        if ($user)
+        {
+            return $user;
+        }
+        else
+        {
+            View::renderTemplate('Password/token_expired.html');
+            exit;
+        }
+    }
+
+    protected function resetSucceedAction()
+    {
+        if (isset($_SESSION['resetSucceed']))
+        {
+            unset($_SESSION['resetSucceed']);
+            View::renderTemplate('Password/reset_success.html');
+        }
+        else $this->redirect('/');
+    }
 }
