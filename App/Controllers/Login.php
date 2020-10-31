@@ -17,20 +17,19 @@ class Login extends \Core\Controller
     {
         $user = User::authenticate($_POST['login'], $_POST['password']);
 
-        //$remember_me = isset($_POST['remember_me']);
+        $remember_me = isset($_POST['remember_me']);
 
-        if ($user)
+        if ($user )
         {
-            Auth::login($user);
-            $this->redirect('/');
-            //$this->redirect(Auth::getReturnToPage());
+            Auth::login($user, $remember_me);
+            $this->redirect(Auth::getReturnToPage());
         }
         else
         {
             View::renderTemplate('Login/new.html',
             [
-                'login' => $_POST['login']
-                //'remember_me' => $remember_me
+                'login' => $_POST['login'],
+                'remember_me' => $remember_me
             ]);
         }
     }
