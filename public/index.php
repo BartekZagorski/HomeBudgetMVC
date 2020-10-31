@@ -29,5 +29,6 @@ $router = new Core\Router();
 // Add the routes
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
 $router->add('{controller}/{action}');
+$router->add('{controller}/{action}/{token:[\da-f]+}');
     
 $router->dispatch($_SERVER['QUERY_STRING']);
