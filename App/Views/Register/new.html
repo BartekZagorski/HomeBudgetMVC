@@ -1,5 +1,67 @@
 {% extends "base.html" %}
 
+{% block footer %}
+
+<script src="/js/app.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#formRegister').validate({
+                rules:{
+                    login: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 20,
+                        validLogin: true
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: '/account/validate-email'
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6,
+                        validPassword: true
+                    },
+                    passwordConfirm: {
+                        required: true,
+                        equalTo: '[name = "password"]'
+                    }
+                },
+                messages:{
+                    login:{
+                        required:'To pole jest wymagane',
+                        minlength: 'Login musi posiadać od 3 do 20 znaków',
+                        maxlength: 'Login musi posiadać od 3 do 20 znaków'
+                    },
+                    email: {
+                        remote: 'Podany email jest już zajęty',
+                        required: 'To pole jest wymagane',
+                        email: 'Podany adres email jest niepoprawny'
+                    },
+                    password:{
+                        required: 'To pole jest wymagane',
+                        minlength: 'Proszę podać minimum 6 znaków'
+                    },
+                    passwordConfirm:{
+                        required: 'To pole jest wymagane',
+                        equalTo: 'Podane hasła nie są identyczne'
+                    }
+            },
+
+            errorPlacement: function(label, element) {
+            label.addClass('mt-1 mb-0 text-danger small');
+            label.insertAfter(element.closest(".input-group"));
+            },
+            wrapper: 'p'
+        });
+    });
+    </script>
+
+
+{% endblock %}
+
 {% block main %}
 
     <article  class="py-3">
@@ -11,7 +73,7 @@
                             <h3 class="h5 m-0">Rejestracja</h3>
                         </div>
                         <div class="card-body border-primary py-3">
-                            <form action="/register/create" method="post">
+                            <form action="/register/create" method="post" id="formRegister">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text px-2">
