@@ -30,6 +30,8 @@ $router = new Core\Router();
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
 $router->add('login', ['controller' => 'Login', 'action' => 'new']);
 $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
+$router->add('dodaj-przychód', ['controller' => 'Income', 'action' => 'new']);
+$router->add('dodaj-wydatek', ['controller' => 'Expense', 'action' => 'new']);
 $router->add('{controller}/{action}');
 $router->add('{controller}/{action}/{token:[\da-f]+}');
     
