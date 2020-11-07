@@ -34,12 +34,18 @@
                                 
                                 <select class="form-control" name="method" required>
                                     <option value="" disabled selected hidden>Wybierz Sposób Płatności</option>
+                                    {% for method in methods %}
+                                        <option value="{{ method.name }}">{{ method.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="input-group mt-3">
                                 
                                 <select class="form-control" name="cattegory" required>
                                     <option value="" disabled selected hidden>Wybierz Kategorię</option>
+                                    {% for cattegory in cattegories %}
+                                        <option value="{{ cattegory.name }}">{{ cattegory.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="input-group mt-3">
