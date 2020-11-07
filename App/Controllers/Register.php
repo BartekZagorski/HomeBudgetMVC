@@ -18,11 +18,9 @@ class Register extends \Core\Controller
 
         if ($user->save())
         {
-            if ($user->addDefaultCattegories())
-            {
-                $_SESSION['registrationSuccess'] = true;
-                $this->redirect('/register/success');
-            }
+            $user->addDefaultCattegories()
+            $_SESSION['registrationSuccess'] = true;
+            $this->redirect('/register/success'); 
         }
         else
         {

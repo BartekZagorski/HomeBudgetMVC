@@ -4,6 +4,16 @@
 
     <script src="/js/defDate.js"></script>
 
+    <script>
+                    let today = new Date();
+                    let date = new Date(today.getFullYear(), today.getMonth()+1, 0);
+                    let yr = date.getFullYear();
+                    let month = date.getMonth() < 9 ? '0' + (date.getMonth()+1) : date.getMonth()+1;
+                    let day = date.getDate()  < 10 ? '0' + date.getDate()  : date.getDate();
+                    let lastDayOfThisMonth = yr + '-' + month + '-' + day;
+                    $("#date").attr("max", lastDayOfThisMonth);
+    </script>
+
 {% endblock %}
 
 {% block main %}
@@ -17,24 +27,27 @@
                         <h3 class="h5 m-0"><i class="icon-dollar"></i>dodaj przychód</h3>
                     </div>
                     <div class="card-body border-primary py-2">
-                        <form action="addIncome.php" method="POST">
+                        <form action="/income/create" method="POST" id="formIncome">
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text px-2"><i class="icon-money"></i></span>
                                 </div>
-                                <input type="number" name="amount" id="amount" step="0.01" class="form-control" placeholder="podaj kwotę" onfocus="this.placeholder=''" onblur="this.placeholder='podaj kwotę'" required>
+                                <input type="number" name="amount" id="amount" step="0.01" class="form-control" placeholder="podaj kwotę" onfocus="this.placeholder=''" onblur="this.placeholder='podaj kwotę'" value="{{ income.amount }}" required>
                             </div>
+                            {% if income.errors['amount'] is defined %}
+                                <p class="mt-1 text-danger small">{{ income.errors['amount'] }}</p>
+                            {% endif %}
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
                                 </div>
-                                <input type="date" name="date" id="date" class="form-control" required>
+                                <input type="date" name="date" id="date" class="form-control" value="{{ income.date }}" required>
                             </div>
                             <div class="input-group mt-3">
                                 <select class="form-control" name="cattegory" required>
                                     <option value="" disabled selected hidden>Wybierz Kategorię</option>
                                     {% for cattegory in cattegories %}
-                                        <option value="{{ cattegory.name }}">{{ cattegory.name }} </option>
+                                        <option value="{{ cattegory.name }}" {% if cattegory.name == income.cattegory %} selected {% endif %} >{{ cattegory.name }} </option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -42,12 +55,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text px-2"><i class="icon-edit"></i></span>
                                 </div>
-                                <input type="text" name="comment" id="comment" class="form-control" placeholder="komentarz" onfocus="this.placeholder=''" onblur="this.placeholder='komentarz'"
+                                <input type="text" name="comment" id="comment" class="form-control" placeholder="komentarz" onfocus="this.placeholder=''" onblur="this.placeholder='komentarz'" value="{{ income.comment }}"
                                 >
                             </div>
                             <div class="d-flex justify-content-around">
                                 <button type="submit" class="btn btn-outline-success mt-3"><i class="icon-plus-circled"></i>dodaj</button>
-                                <a href="menuGlowne.php" class="btn btn-outline-danger mt-3">
+                                <a href="/" class="btn btn-outline-danger mt-3">
                                     <i class="icon-cancel-circled"></i>anuluj
                                 </a>
                             </div>
