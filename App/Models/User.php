@@ -296,4 +296,49 @@ class User extends \Core\Model
         return $stmt->execute();
     }
 
+    public function addDefaultCattegories()
+    {
+        $user = static::findByLogin($_POST['login']);
+
+        if($user)
+        {
+            static::addDefaultIncomeCattegories($user->id);
+            static::addDefaultExpenseCattegories($user->id);
+            static::addDefaultPaymentMethods($user->id);
+            return true;
+        }
+        return false;
+    }
+
+    protected static function addDefaultIncomeCattegories($user_id)
+    {
+        $sql = 'INSERT INTO incomes_cattegories_assigned_to_users (user_id, name) SELECT :id, name FROM incomes_cattegories_default ORDER BY id';
+
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+        $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+    protected static function addDefaultExpenseCattegories($user_id)
+    {
+        $sql = 'INSERT INTO expenses_cattegories_assigned_to_users (user_id, name) SELECT :id, name FROM expenses_cattegories_default ORDER BY id';
+
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+        $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+    protected static function addDefaultPaymentMethods($user_id)
+    {
+        $sql = 'INSERT INTO payment_method_assigned_to_user (user_id, name) SELECT :id, name FROM payment_method_default ORDER BY id';
+
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+        $stmt->bindValue(':id', $user_id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
 }
