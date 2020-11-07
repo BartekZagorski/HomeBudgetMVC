@@ -305,9 +305,7 @@ class User extends \Core\Model
             static::addDefaultIncomeCattegories($user->id);
             static::addDefaultExpenseCattegories($user->id);
             static::addDefaultPaymentMethods($user->id);
-            return true;
         }
-        return false;
     }
 
     protected static function addDefaultIncomeCattegories($user_id)
