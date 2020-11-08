@@ -18,4 +18,35 @@ class Expense extends Authenticated
             ]
         );
     }
+    public function createAction()
+    {
+        $expense = new ExpModel($_POST);
+
+        if($expense->save())
+        {
+            $_SESSION['addExpenseSuccess'] = true;
+            $this->redirect('/expense/success'); 
+        }
+        else
+        {
+            $expenseCattegories = ExpModel::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+            $paymentMethods = ExpModel::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
+            View::renderTemplate('Expense/new.html',
+            [
+                'cattegories' => $expenseCattegories,
+                'methods' => $paymentMethods,
+                'expense' => $expense
+            ]);
+        }
+    }
+
+    public function successAction()
+    {
+        if (isset($_SESSION['addExpenseSuccess']))
+        {
+            unset($_SESSION['addExpenseSuccess']);
+            View::renderTemplate('Expense/success.html');
+        }
+        else $this->redirect('/');
+    }
 }
