@@ -8,18 +8,26 @@ use App\Models\Expense;
 
 class BrowseStatement extends Authenticated
 {
-    public function showStatementOfCurrentMonthAction()
+    public function showAction()
     {
-        $beginDate = date("Y-m-01");
-        $endDate = date("Y-m-t");
+        View::renderTemplate('BrowseStatement/show.html');
+    }
+
+    public function renderStatementAction()
+    {
+        if (isset($_POST['beginDate'])) $beginDate = date("Y-m-d", strtotime($_POST['beginDate']));
+        else $beginDate = date("Y-m-d", strtotime("first day of this month"));
+        if (isset($_POST['endDate'])) $endDate = date("Y-m-d", strtotime($_POST['endDate']));
+        else $endDate = date("Y-m-d", strtotime("last day of this month"));
 
         $incomes = Income::getIncomesOfCurrentUser($_SESSION['user_id'], $beginDate, $endDate);
         $incomesAccordingToCattegories = Income::getSumsOfIncomesAccordingToCattegories($_SESSION['user_id'], $beginDate, $endDate);
         $expenses = Expense::getExpensesOfCurrentUser($_SESSION['user_id'], $beginDate, $endDate);
         $expensesAccordingToCattegories = Expense::getSumsOfExpensesAccordingToCattegories($_SESSION['user_id'], $beginDate, $endDate);
-        View::renderTemplate('BrowseStatement/showStatementOfCurrentMonth.html',[
-            'beginDate' => date("01-m-Y"),
-            'endDate' => date("t-m-Y"),            
+
+        View::renderTemplate('BrowseStatement/Statement.html',[
+            'beginDate' => $beginDate,
+            'endDate' => $endDate,            
             'incomes' => $incomes,
             'incomesAccordingToCattegories' => $incomesAccordingToCattegories,
             'expenses' => $expenses,
