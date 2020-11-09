@@ -142,4 +142,34 @@ class Expense extends \Core\Model
 
         return $stmt -> fetchAll();
     }
+
+    public static function getExpensesOfCurrentUser($loggedId, $beginDate, $endDate)
+    {   
+        $db = static::getDB();
+
+        $stmt = $db -> prepare('SELECT amount, c.name as cattegory, p.name as method, date_of_expense, expense_comment FROM expenses_cattegories_assigned_to_users as c, payment_method_assigned_to_user as p, expenses WHERE expenses.user_id = :user_id AND expense_cattegory_assigned_to_user_id = c.id AND payment_method_assigned_to_user_id = p.id AND date_of_expense BETWEEN :begin AND :end ORDER BY date_of_expense DESC, amount DESC');
+        $stmt -> bindValue(':user_id', $loggedId, PDO::PARAM_INT);
+        $stmt -> bindValue(':begin', $beginDate, PDO::PARAM_STR);
+        $stmt -> bindValue(':end', $endDate, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt -> execute();
+
+        return $stmt -> fetchAll();
+    }
+
+    public static function getSumsOfExpensesAccordingToCattegories($loggedId, $beginDate, $endDate)
+    {
+        $db = static::getDB();
+
+        $stmt = $db -> prepare('SELECT name as kategoria, SUM(amount) as wydatek FROM expenses, expenses_cattegories_assigned_to_users as c WHERE expenses.user_id = :user_id AND c.id = expense_cattegory_assigned_to_user_id AND date_of_expense BETWEEN :begin AND :end GROUP BY expense_cattegory_assigned_to_user_id ORDER BY wydatek DESC');
+        $stmt -> bindValue(':user_id', $loggedId, PDO::PARAM_INT);
+        $stmt -> bindValue(':begin', $beginDate, PDO::PARAM_STR);
+        $stmt -> bindValue(':end', $endDate, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt -> execute();
+
+        return $stmt -> fetchAll();
+    }
 }
