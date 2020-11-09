@@ -32,6 +32,7 @@ $router->add('login', ['controller' => 'Login', 'action' => 'new']);
 $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
 $router->add('dodaj-przychód', ['controller' => 'Income', 'action' => 'new']);
 $router->add('dodaj-wydatek', ['controller' => 'Expense', 'action' => 'new']);
+$router->add('przeglądaj-bilans', ['controller' => 'BrowseStatement', 'action' => 'show']);
 $router->add('{controller}/{action}');
 $router->add('{controller}/{action}/{token:[\da-f]+}');
     
