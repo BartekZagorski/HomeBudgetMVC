@@ -1237,17 +1237,17 @@
     },
     {
         "name": "twig/twig",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "v2.14.1",
+        "version_normalized": "2.14.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/twigphp/Twig.git",
-            "reference": "9a29e1fa7b5431969f96878b8662e3fcb18601b7"
+            "reference": "5eb9ac5dfdd20c3f59495c22841adc5da980d312"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/twigphp/Twig/zipball/9a29e1fa7b5431969f96878b8662e3fcb18601b7",
-            "reference": "9a29e1fa7b5431969f96878b8662e3fcb18601b7",
+            "url": "https://api.github.com/repos/twigphp/Twig/zipball/5eb9ac5dfdd20c3f59495c22841adc5da980d312",
+            "reference": "5eb9ac5dfdd20c3f59495c22841adc5da980d312",
             "shasum": ""
         },
         "require": {
@@ -1259,15 +1259,18 @@
             "psr/container": "^1.0",
             "symfony/phpunit-bridge": "^4.4.9|^5.0.9"
         },
-        "time": "2020-10-21T12:45:34+00:00",
+        "time": "2020-10-27T19:25:29+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.1-dev"
+                "dev-master": "2.14-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            },
             "psr-4": {
                 "Twig\\": "src/"
             }

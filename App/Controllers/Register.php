@@ -20,7 +20,7 @@ class Register extends \Core\Controller
         {
             $user->addDefaultCattegories();
             $_SESSION['registrationSuccess'] = true;
-            $this->redirect('/register/success'); 
+            $this->redirect('/register/success');
         }
         else
         {
