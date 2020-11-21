@@ -1,0 +1,282 @@
+{% extends "loggedBase.html" %}
+
+{% block footer %}
+
+<div class="modal bd-example-modal-sm fade" id="edit-income-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edytuj kategorię</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="anotherPeriod">
+                    <label class="control-label mb-1">Nazwa kategorii:</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+                        </div>
+                        <input type="text" name="income-cattegory" id="income-cattegory" class="form-control" required>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade" id="edit-expense-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edytuj kategorię</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="anotherPeriod">
+                    <label class="control-label mb-1">Nazwa kategorii:</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+                        </div>
+                        <input type="text" name="expense-cattegory" id="expense-cattegory" class="form-control" required>
+                    </div>
+                    <div class="checkbox mt-2">
+                        <label class="mb-0"> 
+                            <input type="checkbox" name="cattegory-limit" id="cattegory-limit"/> Włącz limit kategorii
+                        </label>
+                    </div>
+                    <div class="input-group my-1 w-50">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text px-2"><i class="icon-money"></i></span>
+                        </div>
+                        <input type="number" name="cattegory-limit-amount" id="cattegory-limit-amount" step="0.01" class="form-control" disabled>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade" id="edit-payment-method">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edytuj metodę płatności</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="anotherPeriod">
+                    <label class="control-label mb-1">Nazwa metody płatności:</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+                        </div>
+                        <input type="text" name="payment-method" id="payment-method" class="form-control" required>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    {% for cattegory in incomeCattegories %}
+
+    {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
+        
+    $('{{ cattegoryName }}').click(function(){
+        $("#income-cattegory").attr("value", "{{ cattegory.name }}");
+    });
+
+    {% endfor %}
+
+    {% for cattegory in expenseCattegories %}
+
+    {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
+        
+    $('{{ cattegoryName }}').click(function(){
+        $("#expense-cattegory").attr("value", "{{ cattegory.name }}");
+    });
+
+    {% endfor %}
+
+    {% for method in paymentMethods %}
+
+    {% set methodName =  "#" ~ method.name|replace({' ': '-'})  %}
+        
+    $('{{ methodName }}').click(function(){
+        $("#payment-method").attr("value", "{{ method.name }}");
+    });
+
+    {% endfor %}
+
+    $("#cattegory-limit").change(function() {
+        if(this.checked) {
+            $("#cattegory-limit-amount").removeAttr('disabled');
+            $("#cattegory-limit-amount").attr('placeholder', 'podaj kwotę');
+            $("#cattegory-limit-amount").attr('onfocus', 'this.placeholder=""');
+            $("#cattegory-limit-amount").attr('onblur', 'this.placeholder="podaj kwotę"');
+        } else {
+            $("#cattegory-limit-amount").attr('disabled', true);
+            $("#cattegory-limit-amount").removeAttr('placeholder');
+            $("#cattegory-limit-amount").removeAttr('onfocus');
+            $("#cattegory-limit-amount").removeAttr('onblur');
+        }
+    });
+    
+</script>
+
+{% endblock %}
+
+{% block main %}
+
+<div id="main-content" class="py-3 height-navbar">
+    <div class="container-fluid">
+        <div class="row align-items-start justify-content-center">
+            <div class="col-md-7 py-4">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary py-2 text-light text-center text-capitalize">
+                        <h3 class="h5 m-0"><i class="icon-cog"></i>ustawienia</h3>
+                    </div>
+                    <div class="card-body border-primary py-3">
+                       
+                        <div class="accordion" id="accordion">
+                            <article>
+                                <div id="incomes-cattegories">
+                                    <button class="settings-btn btn btn-block text-left btn-success px-1 py-2 my-2" type="button" data-toggle="collapse" data-target="#incomes-cattegories-collapse" aria-expanded="false" aria-controls="incomes-cattegories-collapse"> <span class="px-2"><i class="icon-dollar"></i></span>kategorie przychodów</button>
+                                </div>
+                                <div id="incomes-cattegories-collapse" class="collapse" aria-labelledby="incomes-cattegories" data-parent="#accordion">
+                                    <div class="small">
+                                        <h4 class="py-1 h6 font-weight-bold">Istniejące kategorie: </h4>
+                                    
+                                        {% for cattegory in incomeCattegories %}
+                                    
+                                        <div class="container-fluid">
+                                            <div class="border table-primary rounded my-1 row">
+                                                <div class="col-10">
+                                                    <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
+                                                </div>
+                                                <div class="col-2 d-flex justify-content-end align-items-center px-1">
+                                                    <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {% endfor %}
+
+                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
+                                    
+                                    </div>
+                                </div>
+                            </article>
+                            <article>
+                                <div id="expenses-cattegories">
+                                    <button class="settings-btn btn btn-block text-left btn-success px-1 py-2 my-2" type="button" data-toggle="collapse" data-target="#expenses-cattegories-collapse" aria-expanded="false" aria-controls="expenses-cattegories-collapse"> <span class="px-2"><i class="icon-basket"></i></span>kategorie wydatków</button>
+                                </div>
+                                <div id="expenses-cattegories-collapse" class="collapse" aria-labelledby="expenses-cattegories" data-parent="#accordion">
+                                    <div class="small">
+                                        <h4 class="py-1 h6 font-weight-bold">Istniejące kategorie: </h4>
+                                    
+                                        {% for cattegory in expenseCattegories %}
+                                    
+                                        <div class="container-fluid">
+                                            <div class="border table-primary rounded my-1 row">
+                                                <div class="col-10">
+                                                    <p class="font-weight-bold mb-1">{{ cattegory.name }}</p>
+                                                    <p class="small m-0"> Limit : 1000zł</p>
+                                                </div>
+                                                <div class="col-2 d-flex justify-content-end align-items-center px-1">
+                                                    <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-expense-cattegory"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {% endfor %}
+
+                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
+                                    
+                                    </div>
+                                </div>
+                            </article>
+                            <article>
+                                <div id="payment-methods">
+                                    <button class="settings-btn btn btn-block text-left btn-success px-1 py-2 my-2" type="button" data-toggle="collapse" data-target="#payment-methods-collapse" aria-expanded="false" aria-controls="payment-methods-collapse"> <span class="px-2"><i class="icon-money"></i></span>metody płatności</button>
+                                </div>
+                                <div id="payment-methods-collapse" class="collapse" aria-labelledby="payment-methods" data-parent="#accordion">
+                                    <div class="small">
+                                        <h4 class="py-1 h6 font-weight-bold">Istniejące metody płatności: </h4>
+                                    
+                                        {% for method in paymentMethods %}
+                                    
+                                        <div class="container-fluid">
+                                            <div class="border table-primary rounded my-1 row">
+                                                <div class="col-10">
+                                                    <p class="font-weight-bold py-1 mb-1">{{ method.name }}</p>
+                                                </div>
+                                                <div class="col-2 d-flex justify-content-end align-items-center px-1">
+                                                    <a class="mx-1 bg-info text-light" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {% endfor %}
+
+                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj metodę płatności</button>
+                                    
+                                    </div>
+                                </div>
+                            </article>
+                            <article>
+                                <div id="user-edit">
+                                    <button class="settings-btn btn btn-block text-left btn-success px-1 py-2 my-2" type="button" data-toggle="collapse" data-target="#user-edit-collapse" aria-expanded="false" aria-controls="user-edit-collapse"> <span class="px-2"><i class="icon-user"></i></span>użytkownik</button>
+                                </div>
+                                <div id="user-edit-collapse" class="collapse" aria-labelledby="user-edit" data-parent="#accordion">
+                                    <div class="small">
+                                        <p class="mb-2 border-bottom border-primary">nazwa użytkownika: <span class="font-weight-bold"> {{ current_user.login }} </span> </p>
+                                        <p class="mb-2 border-bottom border-primary">adres email: <span class="font-weight-bold"> {{ current_user.email }} </span> </p>
+                                    
+                                    <div class="row">
+                                        <div class="col-xl-6 my-1">
+                                            <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-user"></i></span>edytuj swoje dane</button>
+                                        </div>
+                                        <div class="col-xl-6 my-1">
+                                            <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
+                                        </div>
+                                        <div class="col-xl-6 my-1">
+                                            <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
+                                        </div>
+                                        <div class="col-xl-6 my-1">
+                                            <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
+                                        </div>
+                                    </div>
+                                    
+                                    </div>
+                                </div>
+                            </article>
+
+                          </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

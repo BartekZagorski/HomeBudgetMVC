@@ -79,12 +79,12 @@
     </div>
 
     <div class="row p-2 m-0 border-bottom border-primary">
-        <div class="col-md-10 col-lg-8 px-1 d-flex align-items-center mx-auto">
+        <div class="col-lg-10 px-1 d-flex align-items-center mx-auto">
             <div class="table-responsive text-nowrap">
                 <table class="table table-dark table-bordered table-sm table-striped text-center table-hover mb-2">
                     <thead class="bg-primary text-light">
                         <tr>
-                            <th colspan="5" class="text-uppercase bg-success"> Przychody zestawienie szczegółowe</th>
+                            <th colspan="6" class="text-uppercase bg-success"> Przychody zestawienie szczegółowe</th>
                         </tr>
                         
                         {% set incomeSum = 0 %}
@@ -103,6 +103,7 @@
                                             <th scope="col">Kategoria</th>
                                             <th scope="col">Data</th>
                                             <th scope="col">Komentarz</th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                 <tbody>
@@ -111,18 +112,22 @@
 
                                 {% for income in incomes %}
                                 
-                                    <tr>
+                                    <tr id="{{ income.ID }}">
                                         <td>{{ iter }}.</td>
                                         <td>{{ income.amount }}</td>
                                         <td>{{ income.name }}</td>
                                         <td>{{ income.date_of_income|date("d-m-Y") }}</td>
                                         <td>{{ income.income_comment }}</td>
+                                        <td>
+                                            <button type="button" class="p-0 btn btn-primary text-light"  title="edytuj przychód"><i class="icon-edit"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light" title="usuń przychód"><i class="icon-trash"></i></button>
+                                        </td>
                                     </tr>
                                     {% set incomeSum = incomeSum + income.amount %}
                                     {% set iter = iter + 1 %}
                                 
                                 {% endfor %}
-                                <tr><td>suma:</td><td>{{ incomeSum|number_format(2, '.', '') }}</td><td></td><td></td><td></td></tr>
+                                <tr><td>suma:</td><td>{{ incomeSum|number_format(2, '.', '') }}</td><td></td><td></td><td></td><td></td></tr>
                             
                             </tbody>
                         {% endif %}
@@ -130,12 +135,12 @@
                 </table>  
             </div>
         </div>
-        <div class="col-md-10 col-lg-8 px-1 d-flex align-items-center mx-auto">
+        <div class="col-lg-10 px-1 d-flex align-items-center mx-auto">
             <div class="table-responsive text-nowrap">
                 <table class="table table-dark table-bordered table-sm table-striped text-center table-hover mb-2">
                     <thead class="bg-primary text-light">
                         <tr>
-                            <th colspan="6" class="text-uppercase bg-success"> Wydatki zestawienie szczegółowe</th></tr>
+                            <th colspan="7" class="text-uppercase bg-success"> Wydatki zestawienie szczegółowe</th></tr>
 
                         {% set expenseSum = 0 %}
                         {% if expenses is empty %}
@@ -154,6 +159,7 @@
                                     <th scope="col">Metoda Płatnosci</th>
                                     <th scope="col">Data</th>
                                     <th scope="col">Komentarz</th>
+                                    <th scope="col"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -168,11 +174,15 @@
                                         <td>{{ expense.method }}</td>
                                         <td>{{ expense.date_of_expense|date("d-m-Y") }}</td>
                                         <td>{{ expense.expense_comment }}</td>
+                                        <td>
+                                            <button type="button" class="p-0 btn btn-primary text-light"  title="edytuj wydatek"><i class="icon-edit"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light" title="usuń wydatek"><i class="icon-trash"></i></button>
+                                        </td>
                                     </tr>
                                     {% set expenseSum = expenseSum + expense.amount %}
                                     {% set iter = iter + 1 %}
                                 {% endfor %}
-                                <tr><td>suma:</td><td>{{ expenseSum|number_format(2, '.', '') }}</td><td></td><td></td><td><td></td></td></tr>
+                                <tr><td>suma:</td><td>{{ expenseSum|number_format(2, '.', '') }}</td><td></td><td></td><td></td><td><td></td></td></tr>
                             
                             </tbody>
                         {% endif %}
