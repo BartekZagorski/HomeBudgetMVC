@@ -14,6 +14,10 @@
 .icon-cog:before { content: '\e80c'; } /* '' */
 .icon-home-1:before { content: '\e80d'; } /* '' */
 .icon-edit:before { content: '\e80e'; } /* '' */
+.icon-down-open:before { content: '\e80f'; } /* '' */
+.icon-up-open:before { content: '\e810'; } /* '' */
 .icon-money:before { content: '\f0d6'; } /* '' */
 .icon-dollar:before { content: '\f155'; } /* '' */
+.icon-trash:before { content: '\f1f8'; } /* '' */
 .icon-user-plus:before { content: '\f234'; } /* '' */
+.icon-user-times:before { content: '\f235'; } /* '' */

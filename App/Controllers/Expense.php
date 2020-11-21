@@ -49,4 +49,12 @@ class Expense extends Authenticated
         }
         else $this->redirect('/');
     }
+    public function cattegoryInfoAction()
+    {
+        View::renderTemplate('Expense/test.html',[
+            'cattegory' => $_POST['cattegory'],
+            'date' => $_POST['date'],
+            'amount' => $_POST['amount']
+        ]);
+    }
 }

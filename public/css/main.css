@@ -79,3 +79,11 @@ body{
 .error{
     margin-bottom: 0rem !important;
 }
+
+.settings-btn:before {
+    font-family: "fontello";
+    content: '\e80f';
+    float: right;
+    transition: all 0.5s;
+    margin-right: 0.3em;
+  }

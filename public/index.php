@@ -32,7 +32,7 @@ $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
 $router->add('dodaj-przychód', ['controller' => 'Income', 'action' => 'new']);
 $router->add('dodaj-wydatek', ['controller' => 'Expense', 'action' => 'new']);
 $router->add('przeglądaj-bilans', ['controller' => 'BrowseStatement', 'action' => 'show']);
+$router->add('ustawienia', ['controller' => 'Settings', 'action' => 'show']);
 $router->add('{controller}/{action}');
-$router->add('{controller}/{action}/{token:[\da-f]+}');
-    
+$router->add('{controller}/{action}/{token:[\da-f]+}');   
 $router->dispatch($_SERVER['QUERY_STRING']);
