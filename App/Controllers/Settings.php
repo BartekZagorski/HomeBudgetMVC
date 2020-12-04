@@ -3,16 +3,17 @@
 namespace App\Controllers;
 
 use \Core\View;
-use App\Models\Income;
-use App\Models\Expense;
+use App\Models\IncomeCattegory;
+use App\Models\ExpenseCattegory;
+use App\Models\PaymentMethod;
 
 class Settings extends Authenticated
 {
     public function showAction()
     {
-        $incomeCattegories = Income::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
-        $expenseCattegories = Expense::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
-        $paymentMethods = Expense::getPaymentMethodsAssignedToUser($_SESSION['user_id']);
+        $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+        $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+        $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUser($_SESSION['user_id']);
         View::renderTemplate("Settings/show.html",
         [
             'incomeCattegories' => $incomeCattegories,
@@ -23,19 +24,28 @@ class Settings extends Authenticated
 
     public function loadIncomesCattegoriesAction()
     {
-        $incomeCattegories = Income::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
-        View::renderTemplate('Settings/cattegories.html',
+        $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+        View::renderTemplate('Settings/IncomeCattegory/cattegories.html',
             [
-                'incomeCattegories' => $incomeCattegories,
+                'incomeCattegories' => $incomeCattegories
             ]);
     }
 
     public function loadExpensesCattegoriesAction()
     {
-        $expenseCattegories = Expense::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
-        View::renderTemplate('Settings/cattegories.html',
+        $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+        View::renderTemplate('Settings/ExpenseCattegory/cattegories.html',
             [
-                'expenseCattegories' => $expenseCattegories,
+                'expenseCattegories' => $expenseCattegories
+            ]);
+    }
+
+    public function loadPaymentMethodsAction()
+    {
+        $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUser($_SESSION['user_id']);
+        View::renderTemplate('Settings/PaymentMethod/methods.html',
+            [
+                'paymentMethods' => $paymentMethods
             ]);
     }
 }

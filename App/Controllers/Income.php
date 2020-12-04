@@ -4,12 +4,13 @@ namespace App\Controllers;
 
 use \Core\View;
 use App\Models\Income as IncModel;
+use App\Models\IncomeCattegory;
 
 class Income extends Authenticated
 {
     public function newAction()
     {
-        $incomeCattegories = IncModel::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+        $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
         View::renderTemplate('Income/new.html', 
             [
                 'cattegories' => $incomeCattegories
@@ -28,7 +29,7 @@ class Income extends Authenticated
         }
         else
         {
-            $incomeCattegories = IncModel::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+            $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
             View::renderTemplate('Income/new.html',
             [
                 'cattegories' => $incomeCattegories,

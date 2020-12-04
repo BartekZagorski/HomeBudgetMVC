@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3 class="modal-title">Dodaj kategorię</h3>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+<div class="modal-body">
+    <form action="/income-cattegory/create" method="POST" id="form-add-income-cattegory">
+        <label class="control-label mb-1">Nazwa kategorii:</label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+            </div>
+            <input type="text" name="name" id="income-cattegory-name" class="form-control" value="{{ cattegory.name }}" required>
+        </div>
+        {% if cattegory.errors['name'] is defined %}
+            <p class="mt-1 text-danger small">{{ cattegory.errors['name'] }}</p>
+        {% endif %}
+        <div class="d-flex justify-content-between mt-2">
+            <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+            <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+        </div>
+    </form>
+</div>
+
+

@@ -16,7 +16,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
                         </div>
-                        <input type="text" name="income-cattegory" id="income-cattegory" class="form-control" required>
+                        <input type="text" name="name" id="income-cattegory" class="form-control" required>
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
@@ -26,6 +26,24 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="add-income-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content" id="inc-cattegory"></div>
+    </div>   
+</div>
+
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="add-expense-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content" id="exp-cattegory"></div>
+    </div>   
+</div>
+
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="add-payment-method">
+    <div class="modal-dialog">
+        <div class="modal-content" id="pay-method"></div>
+    </div>   
 </div>
 
 <div class="modal bd-example-modal-sm fade" id="edit-expense-cattegory">
@@ -46,14 +64,14 @@
                     </div>
                     <div class="checkbox mt-2">
                         <label class="mb-0"> 
-                            <input type="checkbox" name="cattegory-limit" id="cattegory-limit"/> Włącz limit kategorii
+                            <input type="checkbox" name="cattegory-limit" class="cattegory-limit"/> Włącz limit kategorii
                         </label>
                     </div>
                     <div class="input-group my-1 w-50">
                         <div class="input-group-prepend">
                             <span class="input-group-text px-2"><i class="icon-money"></i></span>
                         </div>
-                        <input type="number" name="cattegory-limit-amount" id="cattegory-limit-amount" step="0.01" class="form-control" disabled>
+                        <input type="number" name="cattegory-limit-amount" id="cattegory-limit-amount" step="0.01" class="form-control cattegory-limit-amount" disabled>
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
@@ -93,49 +111,140 @@
 
 <script>
 
-    {% for cattegory in incomeCattegories %}
+    $(document).ready(function() {
 
-    {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
+        {% for cattegory in incomeCattegories %}
+
+        {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
+            
+        $('{{ cattegoryName }}').click(function(){
+            $("#income-cattegory").attr("value", "{{ cattegory.name }}");
+        });
+
+        {% endfor %}
+
+        {% for cattegory in expenseCattegories %}
+
+        {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
+            
+        $('{{ cattegoryName }}').click(function(){
+            $("#expense-cattegory").attr("value", "{{ cattegory.name }}");
+        });
+
+        {% endfor %}
+
+        {% for method in paymentMethods %}
+
+        {% set methodName =  "#" ~ method.name|replace({' ': '-'})  %}
+            
+        $('{{ methodName }}').click(function(){
+            $("#payment-method").attr("value", "{{ method.name }}");
+        });
+
+        {% endfor %}
+
+        $(document).on('change', ".cattegory-limit" ,function()
+        {
+            if(this.checked) {
+                $(".cattegory-limit-amount").removeAttr('disabled');
+                $(".cattegory-limit-amount").attr('placeholder', 'podaj kwotę');
+                $(".cattegory-limit-amount").attr('onfocus', 'this.placeholder=""');
+                $(".cattegory-limit-amount").attr('onblur', 'this.placeholder="podaj kwotę"');
+            } else {
+                $(".cattegory-limit-amount").attr('disabled', true);
+                $(".cattegory-limit-amount").removeAttr('placeholder');
+                $(".cattegory-limit-amount").removeAttr('onfocus');
+                $(".cattegory-limit-amount").removeAttr('onblur');
+                $(".cattegory-limit-amount").removeAttr('value');
+            }
+        });
+
+        $("#new-income-cattegory").click(function(){
+            $("#inc-cattegory").load('/income-cattegory/render-add-modal');
+        });
+
+        $("#new-expense-cattegory").click(function(){
+            $("#exp-cattegory").load('/expense-cattegory/render-add-modal');
+        });
+
+        $("#new-payment-method").click(function(){
+            $("#pay-method").load('/payment-method/render-add-modal');
+        });
+
+
+        $(document).on('submit', '#form-add-income-cattegory',function()
+        {
+            let name = $("#income-cattegory-name").val();
+            $("#inc-cattegory").load('/income-cattegory/create',{
+                name: name
+            });
+            return false;
+        });
+
+        $(document).on('submit', '#form-add-expense-cattegory',function()
+        {
+            let name = $("#expense-cattegory-name").val();
+            if ($("#expense-cattegory-amount-check").is(':checked'))
+            {
+                let amount = $("#expense-cattegory-amount").val();
+                $("#exp-cattegory").load('/expense-cattegory/create',{
+                name: name,
+                amount: amount,
+                check: true
+            }, function(){
+                $(".cattegory-limit-amount").removeAttr('disabled');
+            });
+            }
+            else {
+                $("#exp-cattegory").load('/expense-cattegory/create',{
+                name: name
+            });
+            }
+            return false;
+        });
+
+        $(document).on('submit', '#form-add-payment-method',function()
+        {
+            let name = $("#payment-method-name").val();
+            $("#pay-method").load('/payment-method/create',{
+                name: name
+            });
+            return false;
+        });
+
+        $('#add-income-cattegory').on('hidden.bs.modal', function () {
+            $("#incomes-cattegories-collapse").load('settings/load-incomes-cattegories');
+            $("#inc-cattegory").load('/income-cattegory/render-add-modal');
+        });
+
+        $('#add-expense-cattegory').on('hidden.bs.modal', function () {
+            $("#expenses-cattegories-collapse").load('settings/load-expenses-cattegories');
+            $("#exp-cattegory").load('/expense-cattegory/render-add-modal');
+            $(".cattegory-limit").prop('checked', false);
+            $(".cattegory-limit-amount").attr('disabled', true);
+            $(".cattegory-limit-amount").removeAttr('placeholder');
+            $(".cattegory-limit-amount").removeAttr('onfocus');
+            $(".cattegory-limit-amount").removeAttr('onblur');
+        });
+
+        $('#edit-expense-cattegory').on('hidden.bs.modal', function () {
+            $(".cattegory-limit").prop('checked', false);
+            $(".cattegory-limit-amount").attr('disabled', true);
+            $(".cattegory-limit-amount").removeAttr('placeholder');
+            $(".cattegory-limit-amount").removeAttr('onfocus');
+            $(".cattegory-limit-amount").removeAttr('onblur');
+        });
+
         
-    $('{{ cattegoryName }}').click(function(){
-        $("#income-cattegory").attr("value", "{{ cattegory.name }}");
+        $('#add-payment-method').on('hidden.bs.modal', function () {
+            $("#payment-methods-collapse").load('settings/load-payment-methods');
+            $("#pay-method").load('/payment-method/render-add-modal');
+        });
+
+
     });
 
-    {% endfor %}
-
-    {% for cattegory in expenseCattegories %}
-
-    {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
-        
-    $('{{ cattegoryName }}').click(function(){
-        $("#expense-cattegory").attr("value", "{{ cattegory.name }}");
-    });
-
-    {% endfor %}
-
-    {% for method in paymentMethods %}
-
-    {% set methodName =  "#" ~ method.name|replace({' ': '-'})  %}
-        
-    $('{{ methodName }}').click(function(){
-        $("#payment-method").attr("value", "{{ method.name }}");
-    });
-
-    {% endfor %}
-
-    $("#cattegory-limit").change(function() {
-        if(this.checked) {
-            $("#cattegory-limit-amount").removeAttr('disabled');
-            $("#cattegory-limit-amount").attr('placeholder', 'podaj kwotę');
-            $("#cattegory-limit-amount").attr('onfocus', 'this.placeholder=""');
-            $("#cattegory-limit-amount").attr('onblur', 'this.placeholder="podaj kwotę"');
-        } else {
-            $("#cattegory-limit-amount").attr('disabled', true);
-            $("#cattegory-limit-amount").removeAttr('placeholder');
-            $("#cattegory-limit-amount").removeAttr('onfocus');
-            $("#cattegory-limit-amount").removeAttr('onblur');
-        }
-    });
+    
     
 </script>
 
@@ -163,22 +272,28 @@
                                         <h4 class="py-1 h6 font-weight-bold">Istniejące kategorie: </h4>
                                     
                                         {% for cattegory in incomeCattegories %}
-                                    
+                                        
                                         <div class="container-fluid">
                                             <div class="border table-primary rounded my-1 row">
                                                 <div class="col-10">
                                                     <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
                                                 </div>
+
+                                                {% if cattegory.name != "inne" %}
+
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
                                                     <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
                                                     <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
                                                 </div>
+
+                                                {% endif %}
+
                                             </div>
                                         </div>
                                         
                                         {% endfor %}
 
-                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
+                                        <button type="button" class="btn btn-block btn-primary my-3" id="new-income-cattegory" data-toggle="modal" data-target="#add-income-cattegory"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
                                     
                                     </div>
                                 </div>
@@ -196,19 +311,27 @@
                                         <div class="container-fluid">
                                             <div class="border table-primary rounded my-1 row">
                                                 <div class="col-10">
-                                                    <p class="font-weight-bold mb-1">{{ cattegory.name }}</p>
-                                                    <p class="small m-0"> Limit : 1000zł</p>
+                                                    <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
+                                                    {% if cattegory.is_set_limit == 1 %}
+                                                    <p class="m-0"> limit : {{ cattegory.cattegory_limit }} zł</p>
+                                                    {% endif %}
                                                 </div>
+
+                                                {% if cattegory.name != "inne" %}
+
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
                                                     <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-expense-cattegory"><i class="icon-edit"></i></a>
                                                     <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
                                                 </div>
+
+                                                {% endif %}
+
                                             </div>
                                         </div>
                                         
                                         {% endfor %}
 
-                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
+                                        <button type="button" class="btn btn-block btn-primary my-3" id="new-expense-cattegory" data-toggle="modal" data-target="#add-expense-cattegory"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
                                     
                                     </div>
                                 </div>
@@ -228,16 +351,22 @@
                                                 <div class="col-10">
                                                     <p class="font-weight-bold py-1 mb-1">{{ method.name }}</p>
                                                 </div>
+
+                                                {% if method.name != "inna" %}
+
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
                                                     <a class="mx-1 bg-info text-light" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
                                                     <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
                                                 </div>
+
+                                                {% endif %}
+
                                             </div>
                                         </div>
                                         
                                         {% endfor %}
 
-                                        <button type="button" class="btn btn-block btn-primary my-3"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj metodę płatności</button>
+                                        <button type="button" class="btn btn-block btn-primary my-3" id="new-payment-method" data-toggle="modal" data-target="#add-payment-method"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj metodę płatności</button>
                                     
                                     </div>
                                 </div>
@@ -248,23 +377,24 @@
                                 </div>
                                 <div id="user-edit-collapse" class="collapse" aria-labelledby="user-edit" data-parent="#accordion">
                                     <div class="small">
-                                        <p class="mb-2 border-bottom border-primary">nazwa użytkownika: <span class="font-weight-bold"> {{ current_user.login }} </span> </p>
-                                        <p class="mb-2 border-bottom border-primary">adres email: <span class="font-weight-bold"> {{ current_user.email }} </span> </p>
-                                    
-                                    <div class="row">
-                                        <div class="col-xl-6 my-1">
-                                            <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-user"></i></span>edytuj swoje dane</button>
+                                        <div class="py-4">
+                                        <p class="mb-3 border-bottom border-primary">nazwa użytkownika: <span class="font-weight-bold"> {{ current_user.login }} </span> </p>
+                                        <p class="mb-3 border-bottom border-primary">adres email: <span class="font-weight-bold"> {{ current_user.email }} </span> </p>
                                         </div>
-                                        <div class="col-xl-6 my-1">
-                                            <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
+                                        <div class="row">
+                                            <div class="col-xl-6 my-1">
+                                                <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-user"></i></span>edytuj swoje dane</button>
+                                            </div>
+                                            <div class="col-xl-6 my-1">
+                                                <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
+                                            </div>
+                                            <div class="col-xl-6 my-1">
+                                                <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
+                                            </div>
+                                            <div class="col-xl-6 my-1">
+                                                <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
+                                            </div>
                                         </div>
-                                        <div class="col-xl-6 my-1">
-                                            <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
-                                        </div>
-                                        <div class="col-xl-6 my-1">
-                                            <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
-                                        </div>
-                                    </div>
                                     
                                     </div>
                                 </div>
