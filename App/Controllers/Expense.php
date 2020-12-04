@@ -4,13 +4,15 @@ namespace App\Controllers;
 
 use \Core\View;
 use App\Models\Expense as ExpModel;
+use App\Models\ExpenseCattegory;
+use App\Models\PaymentMethod;
 
 class Expense extends Authenticated
 {
     public function newAction()
     {
-        $expenseCattegories = ExpModel::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
-        $paymentMethods = ExpModel::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
+        $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+        $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
         View::renderTemplate('Expense/new.html',
             [
                 'cattegories' => $expenseCattegories,
@@ -29,8 +31,8 @@ class Expense extends Authenticated
         }
         else
         {
-            $expenseCattegories = ExpModel::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
-            $paymentMethods = ExpModel::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
+            $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+            $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
             View::renderTemplate('Expense/new.html',
             [
                 'cattegories' => $expenseCattegories,

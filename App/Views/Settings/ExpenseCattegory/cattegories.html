@@ -1,0 +1,31 @@
+<div class="small">
+    <h4 class="py-1 h6 font-weight-bold">Istniejące kategorie: </h4>
+
+    {% for cattegory in expenseCattegories %}
+
+    <div class="container-fluid">
+        <div class="border table-primary rounded my-1 row">
+            <div class="col-10">
+                <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
+                {% if cattegory.is_set_limit == 1 %}
+                <p class="m-0"> limit : {{ cattegory.cattegory_limit }} zł</p>
+                {% endif %}
+            </div>
+
+            {% if cattegory.name != "inne" %}
+
+            <div class="col-2 d-flex justify-content-end align-items-center px-1">
+                <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-expense-cattegory"><i class="icon-edit"></i></a>
+                <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+    
+    {% endfor %}
+
+    <button type="button" class="btn btn-block btn-primary my-3" id="new-expense-cattegory" data-toggle="modal" data-target="#add-expense-cattegory"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj kategorię</button>
+
+</div>
