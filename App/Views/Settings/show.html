@@ -113,7 +113,7 @@
 
     $(document).ready(function() {
 
-        {% for cattegory in incomeCattegories %}
+        /*{% for cattegory in incomeCattegories %}
 
         {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
             
@@ -141,7 +141,17 @@
             $("#payment-method").attr("value", "{{ method.name }}");
         });
 
-        {% endfor %}
+        {% endfor %}*/
+
+        $("#incomes-cattegories-collapse").on("click", ".income-cattegory-edit", function(){
+            var a = $(this).parent().siblings().children().first().text();
+            $("#edit-income-cattegory input[type=text]").attr("value", a);
+        });
+
+        $("#payment-methods-collapse").on("click", ".payment-method-edit", function(){
+            var a = $(this).parent().siblings().children().first().text();
+            $("#edit-payment-method input[type=text]").attr("value", a);
+        });
 
         $(document).on('change', ".cattegory-limit" ,function()
         {
@@ -159,15 +169,15 @@
             }
         });
 
-        $("#new-income-cattegory").click(function(){
+        $("#incomes-cattegories-collapse").on("click", "#new-income-cattegory", function(){
             $("#inc-cattegory").load('/income-cattegory/render-add-modal');
         });
 
-        $("#new-expense-cattegory").click(function(){
+        $("#expenses-cattegories-collapse").on("click", "#new-expense-cattegory", function(){
             $("#exp-cattegory").load('/expense-cattegory/render-add-modal');
         });
 
-        $("#new-payment-method").click(function(){
+        $("#payment-methods-collapse").on("click", "#new-payment-method", function(){
             $("#pay-method").load('/payment-method/render-add-modal');
         });
 
@@ -214,7 +224,7 @@
 
         $('#add-income-cattegory').on('hidden.bs.modal', function () {
             $("#incomes-cattegories-collapse").load('settings/load-incomes-cattegories');
-            $("#inc-cattegory").load('/income-cattegory/render-add-modal');
+            //$("#inc-cattegory").load('/income-cattegory/render-add-modal');
         });
 
         $('#add-expense-cattegory').on('hidden.bs.modal', function () {
@@ -282,7 +292,7 @@
                                                 {% if cattegory.name != "inne" %}
 
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
-                                                    <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-info text-light income-cattegory-edit" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
                                                     <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
                                                 </div>
 
@@ -355,7 +365,7 @@
                                                 {% if method.name != "inna" %}
 
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
-                                                    <a class="mx-1 bg-info text-light" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-info text-light payment-method-edit" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
                                                     <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
                                                 </div>
 
