@@ -1,8 +1,8 @@
 <div class="small">
-    <h4 class="py-1 h6 font-weight-bold">Istniejące metody: </h4>
+    <h4 class="py-1 h6 font-weight-bold">Istniejące metody płatności: </h4>
 
     {% for method in paymentMethods %}
-    
+
     <div class="container-fluid">
         <div class="border table-primary rounded my-1 row">
             <div class="col-10">
@@ -12,7 +12,7 @@
             {% if method.name != "inna" %}
 
             <div class="col-2 d-flex justify-content-end align-items-center px-1">
-                <a class="mx-1 bg-info text-light" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
+                <a class="mx-1 bg-info text-light payment-method-edit" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
                 <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
             </div>
 
@@ -23,6 +23,6 @@
     
     {% endfor %}
 
-    <button type="button" class="btn btn-block btn-primary my-3" id="new-payment-method" data-toggle="modal" data-target="#add-payment-method"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj metodę</button>
+    <button type="button" class="btn btn-block btn-primary my-3" id="new-payment-method" data-toggle="modal" data-target="#add-payment-method"><span class="px-2"><i class="icon-plus-circled"></i></span>dodaj metodę płatności</button>
 
 </div>
