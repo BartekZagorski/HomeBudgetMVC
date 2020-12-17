@@ -36,6 +36,28 @@ class IncomeCattegory extends \Core\Model
         else return false;
     }
 
+    public function update()
+    {
+        $this->validate();
+
+        if (empty($this->errors))
+        {   
+            $sql = 'UPDATE incomes_cattegories_assigned_to_users
+                    SET name = :name
+                    WHERE id = :id';
+
+            $db = static::getDB();
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt -> execute();
+        }
+        else return false;
+    }
+
     protected function validate()
     {
         $this->name = mb_strtolower($this->name, "UTF-8"); // not strtolower cause of wrongfully encoding polish chars
@@ -48,17 +70,23 @@ class IncomeCattegory extends \Core\Model
         {
             $this->errors['name'] = 'Nazwa kategorii musi składać się z ciągów liter i cyfr oddzielonych pojedynczymi spacjami';
         }
-        else if (static::cattegoryExist($this->name))
+        else if (static::cattegoryExist($this->name, $this->id ?? null))
         {
             $this->errors['name'] = 'Podana nazwa kategorii jest już zajęta';
         }
     }
 
-    public static function cattegoryExist($name)
+    public static function cattegoryExist($name, $ignore_id = null)
     {
         $cattegory = static::findByName($name);
 
-        if ($cattegory) return true;
+        if ($cattegory) 
+        {
+            if ($cattegory->id != $ignore_id)
+            {
+                return true;
+            }
+        }
         else return false;
     }
 
@@ -70,6 +98,21 @@ class IncomeCattegory extends \Core\Model
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    public static function findById($id)
+    {
+        $sql = 'SELECT * FROM incomes_cattegories_assigned_to_users WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
@@ -92,6 +135,18 @@ class IncomeCattegory extends \Core\Model
         $stmt -> execute();
 
         return $stmt -> fetchAll();
+    }
+
+    public function destroy()
+    {
+        $sql = 'DELETE FROM incomes_cattegories_assigned_to_users WHERE id = :id';
+        
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt -> execute();
     }
 
 }

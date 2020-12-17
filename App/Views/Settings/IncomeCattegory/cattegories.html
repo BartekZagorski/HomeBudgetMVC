@@ -2,18 +2,21 @@
     <h4 class="py-1 h6 font-weight-bold">Istniejące kategorie: </h4>
 
     {% for cattegory in incomeCattegories %}
-    
+
     <div class="container-fluid">
         <div class="border table-primary rounded my-1 row">
             <div class="col-10">
                 <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
+                {% if cattegory.is_set_limit == 1 %}
+                <p class="m-0 cattegory-limit"> limit: {{ cattegory.cattegory_limit }} zł</p>
+                {% endif %}
             </div>
 
             {% if cattegory.name != "inne" %}
 
             <div class="col-2 d-flex justify-content-end align-items-center px-1">
                 <a class="mx-1 bg-info text-light income-cattegory-edit" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
-                <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+                <a class="mx-1 bg-danger text-light remove-income-cattegory" name="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="usuń kategorię" data-toggle="modal" data-target="#remove-income-cattegory"><i class="icon-trash"></i></a>
             </div>
 
             {% endif %}

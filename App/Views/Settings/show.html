@@ -2,32 +2,6 @@
 
 {% block footer %}
 
-<div class="modal bd-example-modal-sm fade" id="edit-income-cattegory">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edytuj kategorię</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="anotherPeriod">
-                    <label class="control-label mb-1">Nazwa kategorii:</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
-                        </div>
-                        <input type="text" name="name" id="income-cattegory" class="form-control" required>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
-                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="add-income-cattegory">
     <div class="modal-dialog">
         <div class="modal-content" id="inc-cattegory"></div>
@@ -46,111 +20,121 @@
     </div>   
 </div>
 
+<div class="modal bd-example-modal-sm fade" id="edit-income-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content" id="edit-inc-cattegory"></div>
+    </div>
+</div>
+
 <div class="modal bd-example-modal-sm fade" id="edit-expense-cattegory">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edytuj kategorię</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="anotherPeriod">
-                    <label class="control-label mb-1">Nazwa kategorii:</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
-                        </div>
-                        <input type="text" name="expense-cattegory" id="expense-cattegory" class="form-control" required>
-                    </div>
-                    <div class="checkbox mt-2">
-                        <label class="mb-0"> 
-                            <input type="checkbox" name="cattegory-limit" class="cattegory-limit"/> Włącz limit kategorii
-                        </label>
-                    </div>
-                    <div class="input-group my-1 w-50">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2"><i class="icon-money"></i></span>
-                        </div>
-                        <input type="number" name="cattegory-limit-amount" id="cattegory-limit-amount" step="0.01" class="form-control cattegory-limit-amount" disabled>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
-                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
-                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div class="modal-content" id="edit-exp-cattegory"></div>
     </div>
 </div>
 
 <div class="modal bd-example-modal-sm fade" id="edit-payment-method">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edytuj metodę płatności</h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="anotherPeriod">
-                    <label class="control-label mb-1">Nazwa metody płatności:</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
-                        </div>
-                        <input type="text" name="payment-method" id="payment-method" class="form-control" required>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
-                        <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div class="modal-content" id="edit-pay-method"></div>
     </div>
 </div>
+
+<div class="modal bd-example-modal-sm fade" id="remove-income-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content" id="remove-inc-cat"></div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade" id="remove-expense-cattegory">
+    <div class="modal-dialog">
+        <div class="modal-content" id="remove-exp-cat"></div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade" id="remove-payment-method">
+    <div class="modal-dialog">
+        <div class="modal-content" id="remove-pay-met"></div>
+    </div>
+</div>
+
+
 
 <script>
 
     $(document).ready(function() {
 
-        /*{% for cattegory in incomeCattegories %}
-
-        {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
-            
-        $('{{ cattegoryName }}').click(function(){
-            $("#income-cattegory").attr("value", "{{ cattegory.name }}");
-        });
-
-        {% endfor %}
-
-        {% for cattegory in expenseCattegories %}
-
-        {% set cattegoryName =  "#" ~ cattegory.name|replace({' ': '-'})  %}
-            
-        $('{{ cattegoryName }}').click(function(){
-            $("#expense-cattegory").attr("value", "{{ cattegory.name }}");
-        });
-
-        {% endfor %}
-
-        {% for method in paymentMethods %}
-
-        {% set methodName =  "#" ~ method.name|replace({' ': '-'})  %}
-            
-        $('{{ methodName }}').click(function(){
-            $("#payment-method").attr("value", "{{ method.name }}");
-        });
-
-        {% endfor %}*/
-
         $("#incomes-cattegories-collapse").on("click", ".income-cattegory-edit", function(){
-            var a = $(this).parent().siblings().children().first().text();
-            $("#edit-income-cattegory input[type=text]").attr("value", a);
+            var name = $(this).attr("id").replaceAll("-"," ");
+            $("#edit-inc-cattegory").load('/income-cattegory/edit', {
+                name: name
+            });
         });
 
         $("#payment-methods-collapse").on("click", ".payment-method-edit", function(){
-            var a = $(this).parent().siblings().children().first().text();
-            $("#edit-payment-method input[type=text]").attr("value", a);
+            var name = $(this).attr("id").replaceAll("-"," ");
+            $("#edit-pay-method").load('/payment-method/edit', {
+                name: name
+            });
+        });
+
+        $("#expenses-cattegories-collapse").on("click", ".expense-cattegory-edit", function(){
+            var name = $(this).attr("id").replaceAll("-"," ");
+            $("#edit-exp-cattegory").load('/expense-cattegory/edit', {
+                name: name
+            });
+            
+        });
+        
+        $("#incomes-cattegories-collapse").on("click", ".remove-income-cattegory", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-inc-cat").load('/income-cattegory/remove', {
+                name: name
+            }); 
+        });
+
+        $("#payment-methods-collapse").on("click", ".remove-payment-method", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-pay-met").load('/payment-method/remove', {
+                name: name
+            }); 
+        });
+
+
+
+
+
+
+
+
+        $("#expenses-cattegories-collapse").on("click", ".remove-expense-cattegory", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-exp-cat").load('/expense-cattegory/remove', {
+                name: name
+            }); 
+        });
+
+
+
+
+
+        $("#remove-inc-cat").on("click", ".confirm-remove", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-inc-cat").load('/income-cattegory/destroy', {
+                 name: name
+            }); 
+        });
+
+        $("#remove-exp-cat").on("click", ".confirm-remove", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-exp-cat").load('/expense-cattegory/destroy', {
+                 name: name
+            }); 
+        });
+
+        $("#remove-pay-met").on("click", ".confirm-remove", function(){
+            var name = $(this).attr("name").replaceAll("-"," ");
+            $("#remove-pay-met").load('/payment-method/destroy', {
+                 name: name
+            }); 
         });
 
         $(document).on('change', ".cattegory-limit" ,function()
@@ -170,15 +154,15 @@
         });
 
         $("#incomes-cattegories-collapse").on("click", "#new-income-cattegory", function(){
-            $("#inc-cattegory").load('/income-cattegory/render-add-modal');
+            $("#inc-cattegory").load('/income-cattegory/add');
         });
 
         $("#expenses-cattegories-collapse").on("click", "#new-expense-cattegory", function(){
-            $("#exp-cattegory").load('/expense-cattegory/render-add-modal');
+            $("#exp-cattegory").load('/expense-cattegory/add');
         });
 
         $("#payment-methods-collapse").on("click", "#new-payment-method", function(){
-            $("#pay-method").load('/payment-method/render-add-modal');
+            $("#pay-method").load('/payment-method/add');
         });
 
 
@@ -191,16 +175,27 @@
             return false;
         });
 
+        $(document).on('submit', '#form-edit-income-cattegory',function()
+        {
+            let name = $("#form-edit-income-cattegory input[type=text]").val();
+            const id = parseInt($("#form-edit-income-cattegory input[type=text]").attr("id"));
+            $("#edit-inc-cattegory").load('/income-cattegory/update',{
+                id: id,
+                name: name
+            });
+            return false;
+        });
+
         $(document).on('submit', '#form-add-expense-cattegory',function()
         {
             let name = $("#expense-cattegory-name").val();
             if ($("#expense-cattegory-amount-check").is(':checked'))
             {
-                let amount = $("#expense-cattegory-amount").val();
+                let cattegory_limit = $("#expense-cattegory-amount").val();
                 $("#exp-cattegory").load('/expense-cattegory/create',{
                 name: name,
-                amount: amount,
-                check: true
+                cattegory_limit: cattegory_limit,
+                is_set_limit: true
             }, function(){
                 $(".cattegory-limit-amount").removeAttr('disabled');
             });
@@ -213,6 +208,33 @@
             return false;
         });
 
+        $(document).on('submit', '#form-edit-expense-cattegory',function()
+        {
+            let name = $("#form-edit-expense-cattegory input[type=text]").val();
+            const id = parseInt($("#form-edit-expense-cattegory input[type=text]").attr("id"));
+            var is_set_limit = $("#form-edit-expense-cattegory input[type=checkbox]").is(":checked");
+            var cattegory_limit = null;
+
+            if (is_set_limit)
+            {
+                is_set_limit = 1;
+                cattegory_limit = parseFloat($("#form-edit-expense-cattegory input[type=number]").val());
+            }
+            else
+            {
+                is_set_limit = 0;
+            }
+
+            $("#edit-exp-cattegory").load('/expense-cattegory/update',{
+                id: id,
+                name: name,
+                is_set_limit: is_set_limit,
+                cattegory_limit: cattegory_limit
+            });
+            
+            return false;
+        });
+
         $(document).on('submit', '#form-add-payment-method',function()
         {
             let name = $("#payment-method-name").val();
@@ -222,33 +244,51 @@
             return false;
         });
 
+        $(document).on('submit', '#form-edit-payment-method',function()
+        {
+            let name = $("#form-edit-payment-method input[type=text]").val();
+            const id = parseInt($("#form-edit-payment-method input[type=text]").attr("id"));
+            $("#edit-pay-method").load('/payment-method/update',{
+                id: id,
+                name: name
+            });
+            return false;
+        });
+
         $('#add-income-cattegory').on('hidden.bs.modal', function () {
             $("#incomes-cattegories-collapse").load('settings/load-incomes-cattegories');
-            //$("#inc-cattegory").load('/income-cattegory/render-add-modal');
+        });
+
+        $('#edit-income-cattegory').on('hidden.bs.modal', function () {
+            $("#incomes-cattegories-collapse").load('settings/load-incomes-cattegories');
+        });
+
+        $('#remove-income-cattegory').on('hidden.bs.modal', function () {
+            $("#incomes-cattegories-collapse").load('settings/load-incomes-cattegories');
         });
 
         $('#add-expense-cattegory').on('hidden.bs.modal', function () {
             $("#expenses-cattegories-collapse").load('settings/load-expenses-cattegories');
-            $("#exp-cattegory").load('/expense-cattegory/render-add-modal');
-            $(".cattegory-limit").prop('checked', false);
-            $(".cattegory-limit-amount").attr('disabled', true);
-            $(".cattegory-limit-amount").removeAttr('placeholder');
-            $(".cattegory-limit-amount").removeAttr('onfocus');
-            $(".cattegory-limit-amount").removeAttr('onblur');
         });
 
         $('#edit-expense-cattegory').on('hidden.bs.modal', function () {
-            $(".cattegory-limit").prop('checked', false);
-            $(".cattegory-limit-amount").attr('disabled', true);
-            $(".cattegory-limit-amount").removeAttr('placeholder');
-            $(".cattegory-limit-amount").removeAttr('onfocus');
-            $(".cattegory-limit-amount").removeAttr('onblur');
+            $("#expenses-cattegories-collapse").load('settings/load-expenses-cattegories');
         });
 
+        $('#remove-expense-cattegory').on('hidden.bs.modal', function () {
+            $("#expenses-cattegories-collapse").load('settings/load-expenses-cattegories');
+        });
         
         $('#add-payment-method').on('hidden.bs.modal', function () {
             $("#payment-methods-collapse").load('settings/load-payment-methods');
-            $("#pay-method").load('/payment-method/render-add-modal');
+        });
+
+        $('#edit-payment-method').on('hidden.bs.modal', function () {
+            $("#payment-methods-collapse").load('settings/load-payment-methods');
+        });
+
+        $('#remove-payment-method').on('hidden.bs.modal', function () {
+            $("#payment-methods-collapse").load('settings/load-payment-methods');
         });
 
 
@@ -293,7 +333,7 @@
 
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
                                                     <a class="mx-1 bg-info text-light income-cattegory-edit" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-income-cattegory"><i class="icon-edit"></i></a>
-                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+                                                    <a class="mx-1 bg-danger text-light remove-income-cattegory" name="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="usuń kategorię" data-toggle="modal" data-target="#remove-income-cattegory"><i class="icon-trash"></i></a>
                                                 </div>
 
                                                 {% endif %}
@@ -323,15 +363,15 @@
                                                 <div class="col-10">
                                                     <p class="font-weight-bold py-1 mb-1">{{ cattegory.name }}</p>
                                                     {% if cattegory.is_set_limit == 1 %}
-                                                    <p class="m-0"> limit : {{ cattegory.cattegory_limit }} zł</p>
+                                                    <p class="m-0 cattegory-limit"> limit: {{ cattegory.cattegory_limit }} zł</p>
                                                     {% endif %}
                                                 </div>
 
                                                 {% if cattegory.name != "inne" %}
 
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
-                                                    <a class="mx-1 bg-info text-light" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-expense-cattegory"><i class="icon-edit"></i></a>
-                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń kategorię"><i class="icon-trash"></i></a>
+                                                    <a class="mx-1 bg-info text-light expense-cattegory-edit" id="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="edytuj kategorię" data-toggle="modal" data-target="#edit-expense-cattegory"><i class="icon-edit"></i></a>
+                                                    <a class="mx-1 bg-danger text-light remove-expense-cattegory" name="{{ cattegory.name|replace({' ': '-'}) }}" href="#" title="usuń kategorię" data-toggle="modal" data-target="#remove-expense-cattegory"><i class="icon-trash"></i></a>
                                                 </div>
 
                                                 {% endif %}
@@ -366,7 +406,7 @@
 
                                                 <div class="col-2 d-flex justify-content-end align-items-center px-1">
                                                     <a class="mx-1 bg-info text-light payment-method-edit" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
-                                                    <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
+                                                    <a class="mx-1 bg-danger text-light remove-payment-method"  name="{{ method.name|replace({' ': '-'}) }}" href="#" title="usuń metodę" data-toggle="modal" data-target="#remove-payment-method"><i class="icon-trash"></i></a>
                                                 </div>
 
                                                 {% endif %}

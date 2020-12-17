@@ -24,7 +24,7 @@ class ExpenseCattegory extends \Core\Model
         {   
             $db = static::getDB();
 
-            if (isset($this->check))
+            if (isset($this->is_set_limit))
             {
                 $sql = 'INSERT INTO expenses_cattegories_assigned_to_users(user_id, name, is_set_limit, cattegory_limit) VALUES (:user_id, :name, :is_set_limit, :cattegory_limit)';
             }
@@ -38,11 +38,45 @@ class ExpenseCattegory extends \Core\Model
             $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
             $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
 
-            if (isset($this->check))
+            if (isset($this->is_set_limit))
             {
                 $stmt->bindValue(':is_set_limit', 1, PDO::PARAM_BOOL);
-                $stmt->bindValue(':cattegory_limit', $this->amount, PDO::PARAM_STR);
+                $stmt->bindValue(':cattegory_limit', $this->cattegory_limit, PDO::PARAM_STR);
             }
+
+            return $stmt -> execute();
+        }
+        else return false;
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        if (empty($this->errors))
+        {   
+            $sql = 'UPDATE expenses_cattegories_assigned_to_users
+                    SET name = :name,
+                    is_set_limit = :check,
+                    cattegory_limit = :cattegory_limit
+                    WHERE id = :id';
+
+            $db = static::getDB();
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $stmt->bindValue(':check', $this->is_set_limit, PDO::PARAM_BOOL);
+            if ($this->is_set_limit)
+            {
+                $stmt->bindValue(':cattegory_limit', $this->cattegory_limit, PDO::PARAM_STR);
+            }
+            else
+            {
+                $stmt->bindValue(':cattegory_limit', null, PDO::PARAM_NULL);
+            }
+            
 
             return $stmt -> execute();
         }
@@ -61,41 +95,47 @@ class ExpenseCattegory extends \Core\Model
         {
             $this->errors['name'] = 'Nazwa kategorii musi składać się z ciągów liter i cyfr oddzielonych pojedynczymi spacjami';
         }
-        else if (static::cattegoryExist($this->name))
+        else if (static::cattegoryExist($this->name, $this->id ?? null))
         {
             $this->errors['name'] = 'Podana nazwa kategorii jest już zajęta';
         }
 
-        if (isset($this->check))
+        if (isset($this->is_set_limit) && $this->is_set_limit)
         {
-            //amount validation
+            //cattegory limit validation
 
-            $this->amount = str_replace("," , "." , $this->amount);
+            $this->cattegory_limit = str_replace("," , "." , $this->cattegory_limit);
 
-            //check whether $amountGiven is a numeric
+            //check whether $cattegory_limit Given is a numeric
 
-            if (!is_numeric($this->amount))
+            if (!is_numeric($this->cattegory_limit))
             {
-                $this->errors['amount'] = "Podana wartość nie jest liczbą";
+                $this->errors['cattegory_limit'] = "Podana wartość nie jest liczbą ".$this->check;
             }
-            //let amount take values between 0 and 999 999.99
+            //let cattegory_limit take values between 0 and 999 999.99
             else 
             {
-                $this->amount = number_format($this->amount, 2, ".", "");
-                if ($this->amount<0 || $this->amount > 999999.99)
+                $this->cattegory_limit = number_format($this->cattegory_limit, 2, ".", "");
+                if ($this->cattegory_limit<0 || $this->cattegory_limit > 999999.99)
                 {
-                    $this->errors['amount'] = "Podana wartość nie jest liczbą z przedziału od 0 do 999,999.99";
+                    $this->errors['cattegory_limit'] = "Podana wartość nie jest liczbą z przedziału od 0 do 999,999.99";
                 }
             }
-            //end of amount tests
+            //end of cattegory_limit tests
         }
     }
 
-    public static function cattegoryExist($name)
+    public static function cattegoryExist($name, $ignore_id = null)
     {
         $cattegory = static::findByName($name);
 
-        if ($cattegory) return true;
+        if ($cattegory) 
+        {
+            if ($cattegory->id != $ignore_id)
+            {
+                return true;
+            }
+        }
         else return false;
     }
 
@@ -129,6 +169,18 @@ class ExpenseCattegory extends \Core\Model
         $stmt -> execute();
 
         return $stmt -> fetchAll();
+    }
+
+    public function destroy()
+    {
+        $sql = 'DELETE FROM expenses_cattegories_assigned_to_users WHERE id = :id';
+        
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt -> execute();
     }
 
 }

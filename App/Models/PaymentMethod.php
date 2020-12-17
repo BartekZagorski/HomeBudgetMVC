@@ -36,6 +36,28 @@ class PaymentMethod extends \Core\Model
         else return false;
     }
 
+    public function update()
+    {
+        $this->validate();
+
+        if (empty($this->errors))
+        {   
+            $sql = 'UPDATE payment_method_assigned_to_user
+                    SET name = :name
+                    WHERE id = :id';
+
+            $db = static::getDB();
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt -> execute();
+        }
+        else return false;
+    }
+
     protected function validate()
     {
         $this->name = mb_strtolower($this->name, "UTF-8"); // not strtolower cause of wrongfully encoding polish chars
@@ -48,17 +70,23 @@ class PaymentMethod extends \Core\Model
         {
             $this->errors['name'] = 'Nazwa metody musi składać się z ciągów liter i cyfr oddzielonych pojedynczymi spacjami';
         }
-        else if (static::methodExist($this->name))
+        else if (static::methodExist($this->name, $this->id ?? null))
         {
             $this->errors['name'] = 'Podana nazwa metody jest już zajęta';
         }
     }
 
-    public static function methodExist($name)
+    public static function methodExist($name, $ignore_id = null)
     {
         $method = static::findByName($name);
 
-        if ($method) return true;
+        if ($method)
+        {
+            if ($method->id != $ignore_id)
+            {
+                return true;
+            }
+        }
         else return false;
     }
 
@@ -94,4 +122,15 @@ class PaymentMethod extends \Core\Model
         return $stmt -> fetchAll();
     }
 
+    public function destroy()
+    {
+        $sql = 'DELETE FROM payment_method_assigned_to_user WHERE id = :id';
+        
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt -> execute();
+    }
 }

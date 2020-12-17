@@ -140,4 +140,74 @@ class Expense extends \Core\Model
 
         return $stmt -> fetchAll();
     }
+
+    public static function getCountOfExpensesBelongToGivenPayMethod($methodId)
+    {
+        $db = static::getDB();
+
+        $sql = 'SELECT COUNT(id) as countOfMethods FROM expenses WHERE payment_method_assigned_to_user_id = :methodId';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':methodId', $methodId, PDO::PARAM_INT);
+
+        //$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt -> execute();
+
+        return $stmt -> fetch();
+    }
+
+    public static function replaceRemovedMethod($methodId)
+    {
+        $db = static::getDB();
+
+        $sql = 'UPDATE expenses
+                SET payment_method_assigned_to_user_id = 
+                (SELECT id FROM payment_method_assigned_to_user WHERE user_id = :user_id AND name = "inna" LIMIT 1)
+        
+                WHERE payment_method_assigned_to_user_id = :method_id ';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':method_id', $methodId, PDO::PARAM_INT);
+        $stmt -> bindValue(':user_id', $_SESSION['user_id'] , PDO::PARAM_INT);
+    
+        return $stmt -> execute();
+    }
+
+    public static function getCountOfExpensesBelongToGivenCattegory($cattegoryId)
+    {
+        $db = static::getDB();
+
+        $sql = 'SELECT COUNT(id) as countOfExpenses FROM expenses WHERE expense_cattegory_assigned_to_user_id = :cattegoryId';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':cattegoryId', $cattegoryId, PDO::PARAM_INT);
+
+        //$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt -> execute();
+
+        return $stmt -> fetch();
+    }
+
+    public static function replaceRemovedCattegory($cattegoryId)
+    {
+        $db = static::getDB();
+
+        $sql = 'UPDATE expenses
+                SET expense_cattegory_assigned_to_user_id = 
+                (SELECT id FROM expenses_cattegories_assigned_to_users WHERE user_id = :user_id AND name = "inne")
+        
+                WHERE expense_cattegory_assigned_to_user_id = :cattegory_id ';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':cattegory_id', $cattegoryId, PDO::PARAM_INT);
+        $stmt -> bindValue(':user_id', $_SESSION['user_id'] , PDO::PARAM_INT);
+    
+        return $stmt -> execute();
+    }
 }

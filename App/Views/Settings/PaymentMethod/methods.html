@@ -13,7 +13,7 @@
 
             <div class="col-2 d-flex justify-content-end align-items-center px-1">
                 <a class="mx-1 bg-info text-light payment-method-edit" id="{{ method.name|replace({' ': '-'}) }}" href="#" title="edytuj metodę" data-toggle="modal" data-target="#edit-payment-method"><i class="icon-edit"></i></a>
-                <a class="mx-1 bg-danger text-light" href="#" title="usuń metodę"><i class="icon-trash"></i></a>
+                <a class="mx-1 bg-danger text-light remove-payment-method"  name="{{ method.name|replace({' ': '-'}) }}" href="#" title="usuń metodę" data-toggle="modal" data-target="#remove-payment-method"><i class="icon-trash"></i></a>
             </div>
 
             {% endif %}

@@ -1,29 +1,33 @@
 <div class="modal-header">
-    <h3 class="modal-title">Dodaj kategorię</h3>
+    <h3 class="modal-title">Edytuj kategorię</h3>
     <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
-    <form action="/expense-cattegory/create" method="POST" id="form-add-expense-cattegory">
+    <form id="form-edit-expense-cattegory">
         <label class="control-label mb-1">Nazwa kategorii:</label>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
             </div>
-            <input type="text" name="name" id="expense-cattegory-name" class="form-control" value="{{ cattegory.name }}" required>
+            <input type="text" name="expense-cattegory" id="{{ cattegory.id }}" value="{{ cattegory.name }}" class="form-control" required>
         </div>
         {% if cattegory.errors['name'] is defined %}
             <p class="mt-1 text-danger small">{{ cattegory.errors['name'] }}</p>
         {% endif %}
         <div class="checkbox mt-2">
             <label class="mb-0"> 
-                <input type="checkbox" name="cattegory-limit" id="expense-cattegory-amount-check" class="cattegory-limit" {% if cattegory.is_set_limit %} checked="checked" {% endif %}/> Włącz limit kategorii
+                <input type="checkbox" name="cattegory-limit" class="cattegory-limit"  {% if cattegory.is_set_limit %} checked {% endif %}/> Włącz limit kategorii
             </label>
         </div>
         <div class="input-group my-1 w-50">
             <div class="input-group-prepend">
                 <span class="input-group-text px-2"><i class="icon-money"></i></span>
             </div>
-            <input type="number" name="cattegory-limit-amount" id="expense-cattegory-amount" step="0.01" class="form-control cattegory-limit-amount" value="{{ cattegory.cattegory_limit }}" disabled>
+            <input type="number" name="cattegory-limit-amount" step="0.01" class="form-control cattegory-limit-amount" {% if cattegory.is_set_limit %} 
+            value = "{{ cattegory.cattegory_limit}}"
+            {% else %}
+            disabled
+            {% endif%}>
         </div>
         {% if cattegory.errors['cattegory_limit'] is defined %}
             <p class="mt-1 text-danger small">{{ cattegory.errors['cattegory_limit'] }}</p>
@@ -34,5 +38,3 @@
         </div>
     </form>
 </div>
-
-
