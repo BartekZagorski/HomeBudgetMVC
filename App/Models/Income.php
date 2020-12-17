@@ -135,5 +135,40 @@ class Income extends \Core\Model
 
         return $stmt -> fetchAll();
     }
+
+    public static function getCountOfIncomesBelongToGivenCattegory($cattegoryId)
+    {
+        $db = static::getDB();
+
+        $sql = 'SELECT COUNT(id) as countOfIncomes FROM incomes WHERE income_cattegory_assigned_to_user_id = :cattegoryId';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':cattegoryId', $cattegoryId, PDO::PARAM_INT);
+
+        //$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt -> execute();
+
+        return $stmt -> fetch();
+    }
+
+    public static function replaceRemovedCattegory($cattegoryId)
+    {
+        $db = static::getDB();
+
+        $sql = 'UPDATE incomes
+                SET income_cattegory_assigned_to_user_id = 
+                (SELECT id FROM incomes_cattegories_assigned_to_users WHERE user_id = :user_id AND name = "inne")
+        
+                WHERE income_cattegory_assigned_to_user_id = :cattegory_id ';
+
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':cattegory_id', $cattegoryId, PDO::PARAM_INT);
+        $stmt -> bindValue(':user_id', $_SESSION['user_id'] , PDO::PARAM_INT);
+    
+        return $stmt -> execute();
+    }
 }
 
