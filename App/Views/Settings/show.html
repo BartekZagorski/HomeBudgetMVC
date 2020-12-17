@@ -98,23 +98,12 @@
             }); 
         });
 
-
-
-
-
-
-
-
         $("#expenses-cattegories-collapse").on("click", ".remove-expense-cattegory", function(){
             var name = $(this).attr("name").replaceAll("-"," ");
             $("#remove-exp-cat").load('/expense-cattegory/remove', {
                 name: name
             }); 
         });
-
-
-
-
 
         $("#remove-inc-cat").on("click", ".confirm-remove", function(){
             var name = $(this).attr("name").replaceAll("-"," ");

@@ -48,4 +48,27 @@ class Income extends Authenticated
         else $this->redirect('/');
     }
 
+    public function removeAction()
+    {
+        $id = $_POST["id"];
+        View::renderTemplate('Income/remove.html', [
+            'id' => $id
+        ]);
+    }
+
+    public function destroyAction()
+    {
+        $id = $_POST["id"];
+        $income = IncModel::findById($id);
+        if ($income)
+        {
+            $income->destroy();
+            View::renderTemplate('Settings/success.html',
+            [
+                'message' => "przychód został usunięty!"
+            ]);
+        }
+        
+    }
+
 }
