@@ -119,8 +119,8 @@
                                         <td>{{ income.date_of_income|date("d-m-Y") }}</td>
                                         <td>{{ income.income_comment }}</td>
                                         <td>
-                                            <button type="button" class="p-0 btn btn-primary text-light"  title="edytuj przychód"><i class="icon-edit"></i></button>
-                                            <button type="button" class="p-0 btn btn-danger text-light" title="usuń przychód"><i class="icon-trash"></i></button>
+                                            <button type="button" class="p-0 btn btn-primary text-light edit-income" name="{{ income.ID }}" title="edytuj przychód" data-toggle="modal" data-target="#edit-income"><i class="icon-edit"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light remove-income"  name="{{  income.ID }}" title="usuń przychód" data-toggle="modal" data-target="#remove-income"><i class="icon-trash"></i></button>
                                         </td>
                                     </tr>
                                     {% set incomeSum = incomeSum + income.amount %}
@@ -175,8 +175,8 @@
                                         <td>{{ expense.date_of_expense|date("d-m-Y") }}</td>
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>
-                                            <button type="button" class="p-0 btn btn-primary text-light"  title="edytuj wydatek"><i class="icon-edit"></i></button>
-                                            <button type="button" class="p-0 btn btn-danger text-light" title="usuń wydatek"><i class="icon-trash"></i></button>
+                                            <button type="button" class="p-0 btn btn-primary text-light edit-expense"  title="edytuj wydatek"><i class="icon-edit"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light remove-expense" title="usuń wydatek"><i class="icon-trash"></i></button>
                                         </td>
                                     </tr>
                                     {% set expenseSum = expenseSum + expense.amount %}
@@ -206,3 +206,50 @@
         </div>
     </div> 
 </div>
+
+
+<div class="modal bd-example-modal-sm fade" id="edit-income">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="edit-inc">lalala</div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade" id="remove-income">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="remove-inc"></div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click", ".edit-income", function() {
+        var id = $(this).attr("name");
+        alert(id);
+    });
+
+    $(document).on("click", ".remove-income", function() {
+        var id = $(this).attr("name");
+        $("#remove-inc").load('/income/remove', {
+            id: id
+        }); 
+    });
+
+    $("#remove-inc").on("click", ".confirm-remove", function(){
+        var id = $(this).attr("name");
+        $("#remove-inc").load('/income/destroy', {
+                id: id
+        }); 
+    });
+
+    $('#remove-income').on('hidden.bs.modal', function () {
+        $("#browseStatement").load("/browse-statement/render-statement", function(){drawChart();});
+    });
+
+    $(document).on("click", ".remove-expense", function() {
+        alert("usuń");
+    });
+    $(document).on("click", ".edit-expense", function() {
+        alert("edytuj");
+    });
+
+
+</script>
