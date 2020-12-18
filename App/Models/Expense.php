@@ -115,7 +115,7 @@ class Expense extends \Core\Model
     {   
         $db = static::getDB();
 
-        $stmt = $db -> prepare('SELECT amount, c.name as cattegory, p.name as method, date_of_expense, expense_comment FROM expenses_cattegories_assigned_to_users as c, payment_method_assigned_to_user as p, expenses WHERE expenses.user_id = :user_id AND expense_cattegory_assigned_to_user_id = c.id AND payment_method_assigned_to_user_id = p.id AND date_of_expense BETWEEN :begin AND :end ORDER BY date_of_expense DESC, amount DESC');
+        $stmt = $db -> prepare('SELECT expenses.id as ID, amount, c.name as cattegory, p.name as method, date_of_expense, expense_comment FROM expenses_cattegories_assigned_to_users as c, payment_method_assigned_to_user as p, expenses WHERE expenses.user_id = :user_id AND expense_cattegory_assigned_to_user_id = c.id AND payment_method_assigned_to_user_id = p.id AND date_of_expense BETWEEN :begin AND :end ORDER BY date_of_expense DESC, amount DESC');
         $stmt -> bindValue(':user_id', $loggedId, PDO::PARAM_INT);
         $stmt -> bindValue(':begin', $beginDate, PDO::PARAM_STR);
         $stmt -> bindValue(':end', $endDate, PDO::PARAM_STR);
@@ -208,6 +208,35 @@ class Expense extends \Core\Model
         $stmt -> bindValue(':cattegory_id', $cattegoryId, PDO::PARAM_INT);
         $stmt -> bindValue(':user_id', $_SESSION['user_id'] , PDO::PARAM_INT);
     
+        return $stmt -> execute();
+    }
+
+    public static function findById ($id)
+    {
+        $db = static::getDB();
+        
+        $sql = 'SELECT * FROM expenses WHERE id = :id';
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+
+    }
+
+    public function destroy()
+    {
+        $sql = 'DELETE FROM expenses WHERE id = :id';
+        
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
+
         return $stmt -> execute();
     }
 }

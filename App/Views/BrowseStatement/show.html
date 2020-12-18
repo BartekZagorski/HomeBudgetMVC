@@ -74,6 +74,7 @@
                     {
                         $("#browseStatement").load("/browse-statement/render-statement",
                         {
+                            header: "Przegląd bilansu z bieżącego miesiąca ",
                             beginDate: "first day of this month",
                             endDate: "last day of this month"
                         }, function(){drawChart();});
@@ -83,6 +84,7 @@
                 {
                     $("#browseStatement").load("/browse-statement/render-statement", 
                     {
+                        header: "Przegląd bilansu z poprzedniego miesiąca ",
                         beginDate: "first day of last month",
                         endDate: "last day of last month"
                     }, function(){drawChart();});
@@ -92,6 +94,7 @@
                 {
                     $("#browseStatement").load("/browse-statement/render-statement", 
                     {
+                        header: "Przegląd bilansu z bieżącego roku ",
                         beginDate: "first day of january this year",
                         endDate: "last day of this month"
                     }, function(){drawChart();});
@@ -101,6 +104,7 @@
                 {
                     $("#browseStatement").load("/browse-statement/render-statement",
                         {
+                            header: "Przegląd bilansu z wybranego okresu ",
                             beginDate: $("#start-date").val(),
                             endDate: $("#end-date").val()
                         }, function(){drawChart();});

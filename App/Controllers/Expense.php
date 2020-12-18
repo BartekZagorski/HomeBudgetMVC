@@ -59,4 +59,27 @@ class Expense extends Authenticated
             'amount' => $_POST['amount']
         ]);
     }
+
+    public function removeAction()
+    {
+        $id = $_POST["id"];
+        View::renderTemplate('Expense/remove.html', [
+            'id' => $id
+        ]);
+    }
+
+    public function destroyAction()
+    {
+        $id = $_POST["id"];
+        $expense = ExpModel::findById($id);
+        if ($expense)
+        {
+            $expense->destroy();
+            View::renderTemplate('Settings/success.html',
+            [
+                'message' => "wydatek został usunięty!"
+            ]);
+        }
+        
+    }
 }
