@@ -1,5 +1,5 @@
 <div class="col px-0 my-2 mx-auto">
-    <h2 class="h5 bg-primary text-light text-center py-2 mb-1"><i class="icon-chart-bar"></i>Przegląd bilansu z bieżącego miesiąca </br> (od {{ beginDate|date("d-m-Y") }} do {{ endDate|date("d-m-Y") }})</h2>
+    <h2 class="h5 bg-primary text-light text-center py-2 mb-1" name="{{ header }}"><i class="icon-chart-bar"></i>{{ header }}</br> (od <span class="begin-date">{{ beginDate|date("d-m-Y") }}</span> do <span class="end-date">{{ endDate|date("d-m-Y") }}</span>)</h2>
     <div class="row p-2 m-0 border-bottom border-primary">
         <div class="col-md-8 col-lg-6 px-1 d-flex align-items-center mx-auto">
             <table class="table table-dark table-bordered table-sm table-striped text-center table-hover mb-2">
@@ -120,7 +120,7 @@
                                         <td>{{ income.income_comment }}</td>
                                         <td>
                                             <button type="button" class="p-0 btn btn-primary text-light edit-income" name="{{ income.ID }}" title="edytuj przychód" data-toggle="modal" data-target="#edit-income"><i class="icon-edit"></i></button>
-                                            <button type="button" class="p-0 btn btn-danger text-light remove-income"  name="{{  income.ID }}" title="usuń przychód" data-toggle="modal" data-target="#remove-income"><i class="icon-trash"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light remove-income"  name="{{ income.ID }}" title="usuń przychód" data-toggle="modal" data-target="#remove-income"><i class="icon-trash"></i></button>
                                         </td>
                                     </tr>
                                     {% set incomeSum = incomeSum + income.amount %}
@@ -176,7 +176,7 @@
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>
                                             <button type="button" class="p-0 btn btn-primary text-light edit-expense"  title="edytuj wydatek"><i class="icon-edit"></i></button>
-                                            <button type="button" class="p-0 btn btn-danger text-light remove-expense" title="usuń wydatek"><i class="icon-trash"></i></button>
+                                            <button type="button" class="p-0 btn btn-danger text-light remove-expense" name="{{ expense.ID }}" title="usuń wydatek" data-toggle="modal" data-target="#remove-expense"><i class="icon-trash"></i></button>
                                         </td>
                                     </tr>
                                     {% set expenseSum = expenseSum + expense.amount %}
@@ -220,10 +220,20 @@
     </div>
 </div>
 
+<div class="modal bd-example-modal-sm fade" id="remove-expense">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="remove-exp"></div>
+    </div>
+</div>
+
 <script>
+
+    var header = $("h2").attr("name");
+    var beginDate = $("h2 span.begin-date").text();
+    var endDate = $("h2 span.end-date").text();
+
     $(document).on("click", ".edit-income", function() {
         var id = $(this).attr("name");
-        alert(id);
     });
 
     $(document).on("click", ".remove-income", function() {
@@ -240,13 +250,28 @@
         }); 
     });
 
-    $('#remove-income').on('hidden.bs.modal', function () {
-        $("#browseStatement").load("/browse-statement/render-statement", function(){drawChart();});
+    $(document).on('hidden.bs.modal', function () {
+        $("#browseStatement").load("/browse-statement/render-statement",{
+            header: header,
+            beginDate: beginDate,
+            endDate: endDate
+        }, function(){drawChart();});
     });
 
     $(document).on("click", ".remove-expense", function() {
-        alert("usuń");
+        var id = $(this).attr("name");
+        $("#remove-exp").load('/expense/remove', {
+            id: id
+        }); 
     });
+
+    $("#remove-exp").on("click", ".confirm-remove", function(){
+        var id = $(this).attr("name");
+        $("#remove-exp").load('/expense/destroy', {
+            id: id
+        }); 
+    });
+
     $(document).on("click", ".edit-expense", function() {
         alert("edytuj");
     });

@@ -19,6 +19,7 @@ class BrowseStatement extends Authenticated
         else $beginDate = date("Y-m-d", strtotime("first day of this month"));
         if (isset($_POST['endDate'])) $endDate = date("Y-m-d", strtotime($_POST['endDate']));
         else $endDate = date("Y-m-d", strtotime("last day of this month"));
+        $header = $_POST['header'] ?? $header = "Przegląd bilansu z bieżącego miesiąca ";
 
         $incomes = Income::getIncomesOfCurrentUser($_SESSION['user_id'], $beginDate, $endDate);
         $incomesAccordingToCattegories = Income::getSumsOfIncomesAccordingToCattegories($_SESSION['user_id'], $beginDate, $endDate);
@@ -26,6 +27,7 @@ class BrowseStatement extends Authenticated
         $expensesAccordingToCattegories = Expense::getSumsOfExpensesAccordingToCattegories($_SESSION['user_id'], $beginDate, $endDate);
 
         View::renderTemplate('BrowseStatement/Statement.html',[
+            'header' => $header,
             'beginDate' => $beginDate,
             'endDate' => $endDate,            
             'incomes' => $incomes,
