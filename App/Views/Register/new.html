@@ -12,7 +12,8 @@
                         required: true,
                         minlength: 3,
                         maxlength: 20,
-                        validLogin: true
+                        validLogin: true,
+                        remote: '/account/validate-login'
                     },
                     email: {
                         required: true,
@@ -33,7 +34,8 @@
                     login:{
                         required:'To pole jest wymagane',
                         minlength: 'Login musi posiadać od 3 do 20 znaków',
-                        maxlength: 'Login musi posiadać od 3 do 20 znaków'
+                        maxlength: 'Login musi posiadać od 3 do 20 znaków',
+                        remote: 'Podany login jest już zajęty'
                     },
                     email: {
                         remote: 'Podany email jest już zajęty',

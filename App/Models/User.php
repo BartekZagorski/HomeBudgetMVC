@@ -63,6 +63,11 @@ class User extends \Core\Model
             $this->errors['login'] = "Login może składać się tylko z liter i cyfr bez polskich znaków.";
         }
 
+        if (static::loginExists($this->login, $this->id ?? null))
+        {
+            $this->errors['login'] = "Login $this->login jest już zajęty";
+        }
+
         //email validation
         $emailSafe = filter_var($this->email, FILTER_SANITIZE_EMAIL);
         if ($emailSafe != $this->email || !(filter_var($emailSafe, FILTER_VALIDATE_EMAIL)))
@@ -99,6 +104,20 @@ class User extends \Core\Model
     public static function emailExists($email, $ignoreId = NULL)
     {
         $user = static::findByEmail($email);
+        
+        if ($user)
+        {
+            if ($user->id != $ignoreId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function loginExists($login, $ignoreId = NULL)
+    {
+        $user = static::findByLogin($login);
         
         if ($user)
         {
