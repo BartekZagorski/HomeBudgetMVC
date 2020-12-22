@@ -1,0 +1,33 @@
+<div class="card border-primary">
+    <div class="card-header bg-primary py-2 text-light text-center ">
+        <h3 class="h5 m-0">Edytuj swoje dane</h3>
+    </div>
+    <div class="card-body border-primary py-3">
+        <form action="/settings/update-user-data" method="post" id="formRegister">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2">
+                        <i class="icon-mail"></i>
+                    </span>
+                </div>
+                <input type="email" name="email" id="email" class="form-control" placeholder="email" onfocus="this.placeholder=''" onblur="this.placeholder='email'" value="{{ user.email }}" required>
+            </div>
+            {% if user.errors['email'] is defined %}
+                <p class="mt-1 text-danger small">{{ user.errors['email'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-user"></i></span>
+                </div>
+                <input type="text" name="login" id="login" class="form-control" placeholder="login" onfocus="this.placeholder=''" onblur="this.placeholder='login'" value="{{ user.login }}" >
+            </div>
+            {% if user.errors['login'] is defined %}
+                <p class="mt-1 text-danger small">{{ user.errors['login'] }}</p>
+            {% endif %}
+            <div class="d-flex justify-content-between mt-3">  
+                <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+                <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>

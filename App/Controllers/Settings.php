@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use \Core\View;
+use \App\Auth;
 use App\Models\IncomeCattegory;
 use App\Models\ExpenseCattegory;
 use App\Models\PaymentMethod;
@@ -47,5 +48,13 @@ class Settings extends Authenticated
             [
                 'paymentMethods' => $paymentMethods
             ]);
+    }
+
+    public function editUserDataAction()
+    {
+        $user = Auth::getUser();
+        View::renderTemplate('Settings/editUserData.html',[
+            'user' => $user
+        ]);
     }
 }

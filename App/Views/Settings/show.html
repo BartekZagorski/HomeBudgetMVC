@@ -56,6 +56,12 @@
     </div>
 </div>
 
+<div class="modal bd-example-modal-sm fade" id="edit-data">
+    <div class="modal-dialog">
+        <div class="modal-content" id="edit-user-data"></div>
+    </div>
+</div>
+
 
 
 <script>
@@ -280,6 +286,9 @@
             $("#payment-methods-collapse").load('settings/load-payment-methods');
         });
 
+        $('button.edit-data').click(function(){
+            $("#edit-user-data").load('settings/edit-user-data');
+        })
 
     });
 
@@ -422,7 +431,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xl-6 my-1">
-                                                <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-user"></i></span>edytuj swoje dane</button>
+                                                <button type="button" class="btn btn-block btn-primary edit-data" data-toggle="modal" data-target="#edit-data"><span class="px-2" ><i class="icon-user"></i></span>edytuj swoje dane</button>
                                             </div>
                                             <div class="col-xl-6 my-1">
                                                 <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
