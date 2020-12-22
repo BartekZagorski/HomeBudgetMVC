@@ -87,6 +87,8 @@ class Password extends \Core\Controller
 
     public function changePasswordAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Password/change.html');
     }
 

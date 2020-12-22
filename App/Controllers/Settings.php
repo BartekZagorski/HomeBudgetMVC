@@ -55,6 +55,8 @@ class Settings extends Authenticated
 
     public function editUserDataAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $user = Auth::getUser();
         View::renderTemplate('Settings/editUserData.html',[
             'user' => $user
@@ -63,6 +65,8 @@ class Settings extends Authenticated
 
     public function updateUserDataAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $user = Auth::getUser();
         if ($user->update($_POST))
         {
@@ -80,16 +84,22 @@ class Settings extends Authenticated
 
     public function loadEditUserAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Settings/editUser.html');
     }
 
     public function removeIncomesAndExpenses()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Settings/removeIncomesAndExpenses.html');
     }
 
     public function deleteIncomesAndExpenses()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $user = Auth::getUser();
         if (Income::deleteEveryIncomes($user->id) && Expense::deleteEveryExpenses($user->id))
         {
@@ -101,11 +111,15 @@ class Settings extends Authenticated
 
     public function deleteAccount()
     {        
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Settings/deleteAccount.html');
     }
 
     public function destroyAccount()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $user = User::findByLogin($_POST['login']);
         if ($user->delete())
         {
