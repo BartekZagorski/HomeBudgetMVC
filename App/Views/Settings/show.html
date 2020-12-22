@@ -74,6 +74,12 @@
     </div>
 </div>
 
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="delete-account">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="confirm-delete-account"></div>
+    </div>
+</div>
+
 
 
 <script>
@@ -307,6 +313,9 @@
         $(document).on('click', 'button.remove-each-incomes-and-expenses', function(){
             $("#remove-each-inc-and-exp").load('settings/remove-incomes-and-expenses');
         });
+        $(document).on('click', 'button.delete-account', function(){
+            $("#confirm-delete-account").load('settings/delete-account');
+        });
 
     });
 
@@ -458,7 +467,7 @@
                                                 <button type="button" class="btn btn-block btn-danger remove-each-incomes-and-expenses" data-toggle="modal" data-target="#remove-each-incomes-and-expenses"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
                                             </div>
                                             <div class="col-xl-6 my-1">
-                                                <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
+                                                <button type="button" class="btn btn-block btn-danger delete-account" data-toggle="modal" data-target="#delete-account"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
                                             </div>
                                         </div>
                                     

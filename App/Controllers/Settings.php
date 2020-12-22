@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Auth;
+use \App\Models\User;
 use App\Models\IncomeCattegory;
 use App\Models\Income;
 use App\Models\ExpenseCattegory;
@@ -94,6 +95,22 @@ class Settings extends Authenticated
         {
             View::renderTemplate('Settings/success.html',[
                 'message' => "Przychody i wydatki zostały usunięte!"
+            ]);
+        }
+    }
+
+    public function deleteAccount()
+    {
+        View::renderTemplate('Settings/deleteAccount.html');
+    }
+
+    public function destroyAccount()
+    {
+        $user = User::findByLogin($_POST['login']);
+        if ($user->delete())
+        {
+            View::renderTemplate('Settings/success.html',[
+                'message' => "Konto zostało usunięte! Kliknij OK aby przejść do strony głównej."
             ]);
         }
     }
