@@ -100,7 +100,7 @@ class Settings extends Authenticated
     }
 
     public function deleteAccount()
-    {
+    {        
         View::renderTemplate('Settings/deleteAccount.html');
     }
 

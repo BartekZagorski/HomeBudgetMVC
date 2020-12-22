@@ -10,6 +10,8 @@ class IncomeCattegory extends Authenticated
 {
     public function createAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $cattegory = new Cattegory($_POST);
 
         if ($cattegory->save())
@@ -30,6 +32,8 @@ class IncomeCattegory extends Authenticated
 
     public function updateAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $cattegory = new Cattegory($_POST);
 
         if ($cattegory->update())
@@ -50,11 +54,15 @@ class IncomeCattegory extends Authenticated
 
     public function addAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Settings/IncomeCattegory/addCattegory.html');
     }
 
     public function editAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+
         $name = $_POST['name'];
         $cattegory = Cattegory::findByName($name);
         View::renderTemplate('Settings/IncomeCattegory/editCattegory.html',
@@ -66,6 +74,8 @@ class IncomeCattegory extends Authenticated
 
     public function removeAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $name = $_POST['name'];
         $cattegory = Cattegory::findByName($name);
         $numberOfIncomes = Income::getCountOfIncomesBelongToGivenCattegory($cattegory->id);

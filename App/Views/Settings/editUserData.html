@@ -45,7 +45,9 @@
         });
 
         $('#edit-data').on('hidden.bs.modal', function () {
-            $("#user-edit-collapse").load('settings/load-edit-user');
+            $("#user-edit-collapse").load('settings/load-edit-user',{
+                flag: true
+            });
         });
     });
 

@@ -167,15 +167,21 @@
         });
 
         $("#incomes-cattegories-collapse").on("click", "#new-income-cattegory", function(){
-            $("#inc-cattegory").load('/income-cattegory/add');
+            $("#inc-cattegory").load('/income-cattegory/add',{
+                flag: true
+            });
         });
 
         $("#expenses-cattegories-collapse").on("click", "#new-expense-cattegory", function(){
-            $("#exp-cattegory").load('/expense-cattegory/add');
+            $("#exp-cattegory").load('/expense-cattegory/add',{
+                flag: true
+            });
         });
 
         $("#payment-methods-collapse").on("click", "#new-payment-method", function(){
-            $("#pay-method").load('/payment-method/add');
+            $("#pay-method").load('/payment-method/add',{
+                flag: true
+            });
         });
 
 
@@ -305,16 +311,24 @@
         });
 
         $(document).on('click', 'button.edit-data', function(){
-            $("#edit-user-data").load('settings/edit-user-data');
+            $("#edit-user-data").load('settings/edit-user-data',{
+                flag: true
+            });
         });
         $(document).on('click', 'button.change-password', function(){
-            $("#change-pass").load('password/change-password');
+            $("#change-pass").load('password/change-password',{
+                flag: true
+            });
         });
         $(document).on('click', 'button.remove-each-incomes-and-expenses', function(){
-            $("#remove-each-inc-and-exp").load('settings/remove-incomes-and-expenses');
+            $("#remove-each-inc-and-exp").load('settings/remove-incomes-and-expenses',{
+                flag: true
+            });
         });
         $(document).on('click', 'button.delete-account', function(){
-            $("#confirm-delete-account").load('settings/delete-account');
+            $("#confirm-delete-account").load('settings/delete-account',{
+                flag: true
+            });
         });
 
     });

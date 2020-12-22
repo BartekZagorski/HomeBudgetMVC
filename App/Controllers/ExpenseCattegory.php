@@ -10,6 +10,8 @@ class ExpenseCattegory extends Authenticated
 {
     public function createAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+
         $cattegory = new Cattegory($_POST);
 
         if ($cattegory->save())
@@ -30,11 +32,15 @@ class ExpenseCattegory extends Authenticated
 
     public function addAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+
         View::renderTemplate('Settings/ExpenseCattegory/addCattegory.html');
     }
 
     public function editAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $name = $_POST['name'];
         $cattegory = Cattegory::findByName($name);
         View::renderTemplate('Settings/ExpenseCattegory/editCattegory.html',
@@ -46,6 +52,8 @@ class ExpenseCattegory extends Authenticated
 
     public function updateAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $cattegory = new Cattegory($_POST);
 
         if ($cattegory->update())
@@ -97,9 +105,5 @@ class ExpenseCattegory extends Authenticated
         
     }
 
-    public function getLimitAction()
-    {     
-        $cattegory = Cattegory::findByName($_POST['cattegory']);
-        var_dump($cattegory);
-    }
+    
 }
