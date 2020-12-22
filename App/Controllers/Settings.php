@@ -5,7 +5,9 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use App\Models\IncomeCattegory;
+use App\Models\Income;
 use App\Models\ExpenseCattegory;
+use App\Models\Expense;
 use App\Models\PaymentMethod;
 
 class Settings extends Authenticated
@@ -75,8 +77,24 @@ class Settings extends Authenticated
         }
     }
 
-    public function loadEditUser()
+    public function loadEditUserAction()
     {
         View::renderTemplate('Settings/editUser.html');
+    }
+
+    public function removeIncomesAndExpenses()
+    {
+        View::renderTemplate('Settings/removeIncomesAndExpenses.html');
+    }
+
+    public function deleteIncomesAndExpenses()
+    {
+        $user = Auth::getUser();
+        if (Income::deleteEveryIncomes($user->id) && Expense::deleteEveryExpenses($user->id))
+        {
+            View::renderTemplate('Settings/success.html',[
+                'message' => "Przychody i wydatki zostały usunięte!"
+            ]);
+        }
     }
 }

@@ -1,0 +1,50 @@
+<div class="card border-primary">
+    <div class="card-header bg-primary py-2 text-light text-center ">
+        <h3 class="h5 m-0">Zmiana hasła</h3>
+    </div>
+    <div class="card-body border-primary py-3">
+        <form action="/password/reset-password" method="post" id="formChangePassword">
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-lock"></i></span>
+                </div>
+                <input type="password" name="password" id="password" class="form-control" placeholder="nowe hasło" onfocus="this.placeholder=''" onblur="this.placeholder='nowe hasło'" value="{{ user.password }}" required>
+            </div>
+            {% if user.errors['password'] is defined %}
+                <p class="mt-1 text-danger small">{{ user.errors['password'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-lock"></i></span>
+                </div>
+                <input type="password" name="passwordConfirm" id="password-confirm" class="form-control" placeholder="powtórz nowe hasło" onfocus="this.placeholder=''" onblur="this.placeholder='powtórz nowe hasło'" value="{{ user.passwordConfirm }}" required>
+            </div>
+            {% if login != '' %}
+                <p class="mt-3 mb-0 text-danger small">Niepoprawny login lub hasło </p>
+            {% endif %}
+            <div class="d-flex justify-content-between mt-3">  
+                <button type="submit" class="btn btn-outline-success py-1"><i class="icon-plus-circled"></i>zatwierdź</button>
+                <button type="button" class="btn btn-outline-danger py-1" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $(document).on("submit", "#formChangePassword", function(){
+            var password = $("#password").val();
+            var passwordConfirm = $("#password-confirm").val();
+            $("#change-pass").load('password/update-password',{
+                password: password,
+                passwordConfirm: passwordConfirm
+            });
+            return false;
+        });
+
+        $('#change-password').on('hidden.bs.modal', function () {
+            $("#user-edit-collapse").load('settings/load-edit-user');
+        });
+    });
+</script>

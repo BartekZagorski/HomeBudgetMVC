@@ -281,4 +281,18 @@ class Expense extends \Core\Model
         }
         else return false;
     }
+
+    public static function deleteEveryExpenses($loggedId)
+    {
+        $sql = 'DELETE FROM expenses WHERE user_id = :user_id';
+
+        $db = static::getDB();
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $loggedId, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
 }
