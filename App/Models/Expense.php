@@ -99,7 +99,7 @@ class Expense extends \Core\Model
 
         //let comment has less than or equal 100 chars
 
-        if (strlen($this->comment)>100)
+        if (isset($this->comment) && strlen($this->comment)>100)
         {
             $this->errors['comment'] = "komentarz nie może mieć nie więcej niż 100 znaków. Aktualna liczba znaków wynosi: ".strlen($this->comment);
         }
@@ -215,7 +215,7 @@ class Expense extends \Core\Model
     {
         $db = static::getDB();
         
-        $sql = 'SELECT * FROM expenses WHERE id = :id';
+        $sql = 'SELECT expenses.id as id, expenses.user_id as user_id, cattegories.name as cattegory, methods.name as method, amount, date_of_expense as date, expense_comment as comment FROM expenses, expenses_cattegories_assigned_to_users as cattegories, payment_method_assigned_to_user as methods WHERE expenses.id = :id AND expense_cattegory_assigned_to_user_id = cattegories.id AND payment_method_assigned_to_user_id = methods.id';
 
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -238,5 +238,47 @@ class Expense extends \Core\Model
         $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
 
         return $stmt -> execute();
+    }
+
+    public function update()
+    {
+        $this->validate();
+        
+        if (empty($this->errors))
+        {
+            
+            $db = static::getDB();
+
+            if (!isset($this->comment))
+            {
+                $stmt = $db->prepare('UPDATE expenses
+                SET amount = :amount,
+                    date_of_expense = :date,
+                    payment_method_assigned_to_user_id = (SELECT id FROM payment_method_assigned_to_user WHERE name = :method),
+                    expense_cattegory_assigned_to_user_id = (SELECT id FROM expenses_cattegories_assigned_to_users WHERE name = :cattegory),
+                    expense_comment = NULL
+                WHERE id = :id');
+            }
+            else
+            {
+                $stmt = $db->prepare('UPDATE expenses
+                SET amount = :amount,
+                    date_of_expense = :date,
+                    payment_method_assigned_to_user_id = (SELECT id FROM payment_method_assigned_to_user WHERE name = :method),
+                    expense_cattegory_assigned_to_user_id = (SELECT id FROM expenses_cattegories_assigned_to_users WHERE name = :cattegory),
+                    expense_comment = :comment
+                WHERE id = :id');
+                $stmt->bindValue(':comment', $this->comment, PDO::PARAM_STR);
+            }
+            
+            $stmt->bindValue(':amount', $this->amount, PDO::PARAM_STR);
+            $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
+            $stmt->bindValue(':method', $this->method, PDO::PARAM_STR);
+            $stmt->bindValue(':cattegory', $this->cattegory, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+        else return false;
     }
 }

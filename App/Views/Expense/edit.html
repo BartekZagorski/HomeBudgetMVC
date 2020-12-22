@@ -1,0 +1,107 @@
+<div class="card border-primary">
+    <div class="card-header bg-primary py-2 text-light text-center text-capitalize">
+        <h3 class="h5 m-0"><i class="icon-dollar"></i>edytuj wydatek</h3>
+    </div>
+    <div class="card-body border-primary py-2">
+        <form action="/expense/update" method="POST" id="formExpense">
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-money"></i></span>
+                </div>
+                <input type="number" name="amount" id="amount" step="0.01" class="form-control" placeholder="podaj kwotę" onfocus="this.placeholder=''" onblur="this.placeholder='podaj kwotę'" value="{{ expense.amount }}" required>
+            </div>
+            {% if expense.errors['amount'] is defined %}
+                <p class="mt-1 text-danger small">{{ expense.errors['amount'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+                </div>
+                <input type="date" name="date" id="date" class="form-control" min="2000-01-01" value="{{ expense.date }}" required>
+            </div>
+            {% if expense.errors['date'] is defined %}
+                <p class="mt-1 text-danger small">{{ expense.errors['date'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                                
+                <select class="form-control" name="method" required>
+                    <option value="" disabled selected hidden>Wybierz Sposób Płatności</option>
+                    {% for method in methods %}
+                        <option value="{{ method.name }}" {% if method.name == expense.method %} selected {% endif %}>{{ method.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group mt-3">
+                <select class="form-control" id="cattegory" name="cattegory" required>
+                    <option value="" disabled selected hidden>Wybierz Kategorię</option>
+                    {% for cattegory in cattegories %}
+                        <option value="{{ cattegory.name }}" {% if cattegory.name == expense.cattegory %} selected {% endif %} >{{ cattegory.name }} </option>
+                    {% endfor %}
+                </select>
+                <div class="input-group" id="cattegory-limit"></div>
+            </div>
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-edit"></i></span>
+                </div>
+                <input type="text" name="comment" id="comment" class="form-control" value="{{ expense.comment }}"
+                >
+            </div>
+            {% if expense.errors['comment'] is defined %}
+                <p class="mt-1 text-danger small">{{ expense.errors['comment'] }}</p>
+            {% endif %}
+            <div class="d-flex justify-content-around">
+                <button type="submit" class="btn btn-outline-success mt-3" name="{{ expense.id }}"><i class="icon-plus-circled"></i>zatwierdź</button>
+                <button type="button" class="btn btn-outline-danger mt-3" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="/js/cattegoryLimit.js"></script>
+<script>
+    $(document).ready(function(){
+        $(document).on("submit", "#formExpense", function() {
+
+            let id = parseInt($("button[type=submit]").attr("name"));
+            let amount = $("input[name=amount]").val();
+            let date = $("input[name=date]").val();
+            let cattegory = $("select[name=cattegory]").val();
+            let method = $("select[name=method]").val();
+            if ($("input[name=comment]").val() != '')
+            {
+                let comment = $("input[name=comment]").val();
+                var data = [
+                {
+                    "id": id,
+                    "amount": amount,
+                    "date": date,
+                    "method": method,
+                    "cattegory": cattegory,
+                    "comment": comment
+                }
+            ]
+            }
+            else
+            {
+                var data = [
+                    {
+                        "id": id,
+                        "amount": amount,
+                        "date": date,
+                        "method": method,
+                        "cattegory": cattegory
+                    }
+                ]
+            }
+            $("#edit-exp").load('/expense/update', data[0]);
+            
+            return false;
+        });
+
+
+    });
+</script>
+
+

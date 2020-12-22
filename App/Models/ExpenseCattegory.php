@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use PDO;
+use DateTime;
 
 class ExpenseCattegory extends \Core\Model
 {
@@ -181,6 +182,30 @@ class ExpenseCattegory extends \Core\Model
         $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
 
         return $stmt -> execute();
+    }
+
+    public static function getSumOfAmountInRequestedMonth($date, $cattegoryName, $ignore_id = null)
+    {
+        $givenDate = new DateTime($date);
+        $firstDayOfMonth = $givenDate->format('Y-m-1');
+        $lastDayOfMonth = $givenDate->format('Y-m-t');
+
+        $sql = 'SELECT SUM(amount) as sum FROM expenses, expenses_cattegories_assigned_to_users as cattegories WHERE expenses.expense_cattegory_assigned_to_user_id = cattegories.id AND expenses.id != :ignore_id AND cattegories.name = :name AND cattegories.user_id = :user_id AND date_of_expense BETWEEN :begin AND :end';
+        
+        $db = static::getDB();
+        $stmt = $db -> prepare($sql);
+
+        $stmt -> bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt -> bindValue(':ignore_id', $ignore_id, PDO::PARAM_INT);
+        $stmt -> bindValue(':name', $cattegoryName, PDO::PARAM_STR);
+        $stmt -> bindValue(':begin', $firstDayOfMonth, PDO::PARAM_STR);
+        $stmt -> bindValue(':end', $lastDayOfMonth, PDO::PARAM_STR);
+
+        $stmt -> execute();
+
+        $sumOfAmounts = $stmt -> fetch();
+        $sumOfAmounts = $sumOfAmounts["sum"] === null ? 0 : $sumOfAmounts["sum"];
+        return $sumOfAmounts;
     }
 
 }

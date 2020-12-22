@@ -45,7 +45,7 @@ class Income extends \Core\Model
         else return false;
     }
 
-    protected function validate()
+    public function validate()
     {
         //amount validation
 
@@ -94,7 +94,7 @@ class Income extends \Core\Model
 
         //let comment has less than or equal 100 chars
 
-        if (strlen($this->comment)>100)
+        if (isset($this->comment) && strlen($this->comment)>100)
         {
             $this->errors['comment'] = "komentarz nie może mieć nie więcej niż 100 znaków. Aktualna liczba znaków wynosi: ".strlen($this->comment);
         }
@@ -175,7 +175,7 @@ class Income extends \Core\Model
     {
         $db = static::getDB();
         
-        $sql = 'SELECT * FROM incomes WHERE id = :id';
+        $sql = 'SELECT incomes.id as id, incomes.user_id as user_id, cattegories.name as cattegory, amount, date_of_income as date, income_comment as comment  FROM incomes, incomes_cattegories_assigned_to_users as cattegories WHERE incomes.id = :id AND income_cattegory_assigned_to_user_id = cattegories.id';
 
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -198,6 +198,45 @@ class Income extends \Core\Model
         $stmt -> bindValue(':id', $this->id, PDO::PARAM_INT);
 
         return $stmt -> execute();
+    }
+
+    public function update()
+    {
+        $this->validate();
+        
+        if (empty($this->errors))
+        {
+            
+            $db = static::getDB();
+
+            if (!isset($this->comment))
+            {
+                $stmt = $db->prepare('UPDATE incomes
+                SET amount = :amount,
+                    date_of_income = :date,
+                    income_cattegory_assigned_to_user_id = (SELECT id FROM incomes_cattegories_assigned_to_users WHERE name = :cattegory),
+                    income_comment = NULL
+                WHERE id = :id');
+            }
+            else
+            {
+                $stmt = $db->prepare('UPDATE incomes
+                SET amount = :amount,
+                    date_of_income = :date,
+                    income_cattegory_assigned_to_user_id = (SELECT id FROM incomes_cattegories_assigned_to_users WHERE name = :cattegory),
+                    income_comment = :comment
+                WHERE id = :id');
+                $stmt->bindValue(':comment', $this->comment, PDO::PARAM_STR);
+            }
+            
+            $stmt->bindValue(':amount', $this->amount, PDO::PARAM_STR);
+            $stmt->bindValue(':date', $this->date, PDO::PARAM_STR);
+            $stmt->bindValue(':cattegory', $this->cattegory, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+        else return false;
     }
 }
 

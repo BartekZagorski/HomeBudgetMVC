@@ -67,8 +67,43 @@ class Income extends Authenticated
             [
                 'message' => "przychód został usunięty!"
             ]);
+        }        
+    }
+
+    public function editAction()
+    {
+        $id = $_POST["id"];
+        $income = IncModel::findById($id);
+        if ($income)
+        {
+            $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+            View::renderTemplate('Income/edit.html', [
+                'income' => $income,
+                'cattegories' => $incomeCattegories
+            ]);
         }
-        
+    }
+
+    public function updateAction()
+    {
+        $income = new IncModel($_POST);
+
+        if ($income->update())
+        {
+            View::renderTemplate('Settings/success.html',
+            [
+                'message' => "edycja przebiegła pomyślnie!"
+            ]);
+        }
+        else
+        {
+            $incomeCattegories = IncomeCattegory::getIncomeCattegoriesAssignedToUser($_SESSION['user_id']);
+            View::renderTemplate('Income/edit.html', [
+                'income' => $income,
+                'cattegories' => $incomeCattegories
+            ]);
+        }
+
     }
 
 }
