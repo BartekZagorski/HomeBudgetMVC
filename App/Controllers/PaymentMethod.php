@@ -10,6 +10,8 @@ class PaymentMethod extends Authenticated
 {
     public function createAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $method = new Method($_POST);
 
         if ($method->save())
@@ -30,11 +32,15 @@ class PaymentMethod extends Authenticated
 
     public function addAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         View::renderTemplate('Settings/PaymentMethod/addMethod.html');
     }
 
     public function editAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $name = $_POST['name'];
         $method = Method::findByName($name);
         View::renderTemplate('Settings/PaymentMethod/editMethod.html',
@@ -46,6 +52,8 @@ class PaymentMethod extends Authenticated
 
     public function updateAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $method = new Method($_POST);
 
         if ($method->update())
@@ -66,6 +74,8 @@ class PaymentMethod extends Authenticated
 
     public function removeAction()
     {
+        if (empty($_POST)) $this->redirect('/');
+        
         $name = $_POST['name'];
         $method = Method::findByName($name);
         $numberOfExpenses = Expense::getCountOfExpensesBelongToGivenPayMethod($method->id);
