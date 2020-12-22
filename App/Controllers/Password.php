@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use \Core\View;
+use \App\Auth;
 use App\Models\User;
 
 class Password extends \Core\Controller
@@ -83,4 +84,28 @@ class Password extends \Core\Controller
         }
         else $this->redirect('/');
     }
+
+    public function changePasswordAction()
+    {
+        View::renderTemplate('Password/change.html');
+    }
+
+    public function updatePasswordAction()
+    {
+        $user = Auth::getUser();
+        if ($user->updatePassword($_POST))
+        {
+            View::renderTemplate('Settings/success.html',[
+                'message' => "Zmiany zostały zapisane!"
+            ]);
+        }
+        else
+        {
+            View::renderTemplate('Password/change.html',[
+                'user' => $user
+            ]);
+        }
+    }
+
+
 }

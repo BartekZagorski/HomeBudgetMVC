@@ -47,10 +47,15 @@ class User extends \Core\Model
         else return false;
     }
 
-    public function validate()
+    protected function validate()
     {
         $this->validateData();
+        $this->validatePassword();
+        
+    }
 
+    protected function validatePassword()
+    {
         if (isset($this->password))
         {
             if (strlen($this->password)<6)
@@ -378,6 +383,33 @@ class User extends \Core\Model
 
             $stmt->bindValue(':login', $this->login, PDO::PARAM_STR);
             $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt -> execute();            
+        }
+        return false;
+    }
+
+    public function updatePassword($data)
+    {
+        $this->password = $data['password'];
+        $this->passwordConfirm = $data['passwordConfirm'];
+
+        $this->validatePassword();
+
+        if (empty($this->errors))
+        {
+            $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
+
+            $sql = 'UPDATE users
+                    SET password = :password
+                    WHERE id = :id';
+
+            $db = static::getDB();
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':password', $password_hash, PDO::PARAM_STR);
             $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
 
             return $stmt -> execute();            

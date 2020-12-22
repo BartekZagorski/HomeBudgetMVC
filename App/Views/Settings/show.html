@@ -62,6 +62,18 @@
     </div>
 </div>
 
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="change-password">
+    <div class="modal-dialog">
+        <div class="modal-content" id="change-pass"></div>
+    </div>
+</div>
+
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="remove-each-incomes-and-expenses">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="remove-each-inc-and-exp"></div>
+    </div>
+</div>
+
 
 
 <script>
@@ -289,6 +301,12 @@
         $(document).on('click', 'button.edit-data', function(){
             $("#edit-user-data").load('settings/edit-user-data');
         });
+        $(document).on('click', 'button.change-password', function(){
+            $("#change-pass").load('password/change-password');
+        });
+        $(document).on('click', 'button.remove-each-incomes-and-expenses', function(){
+            $("#remove-each-inc-and-exp").load('settings/remove-incomes-and-expenses');
+        });
 
     });
 
@@ -434,10 +452,10 @@
                                                 <button type="button" class="btn btn-block btn-primary edit-data" data-toggle="modal" data-target="#edit-data"><span class="px-2" ><i class="icon-user"></i></span>edytuj swoje dane</button>
                                             </div>
                                             <div class="col-xl-6 my-1">
-                                                <button type="button" class="btn btn-block btn-primary"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
+                                                <button type="button" class="btn btn-block btn-primary change-password" data-toggle="modal" data-target="#change-password"><span class="px-2"><i class="icon-lock"></i></span>zmień hasło</button>
                                             </div>
                                             <div class="col-xl-6 my-1">
-                                                <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
+                                                <button type="button" class="btn btn-block btn-danger remove-each-incomes-and-expenses" data-toggle="modal" data-target="#remove-each-incomes-and-expenses"><span class="px-2"><i class="icon-trash"></i></span>usuń wszystkie przychody i wydatki</button>
                                             </div>
                                             <div class="col-xl-6 my-1">
                                                 <button type="button" class="btn btn-block btn-danger"><span class="px-2"><i class="icon-user-times"></i></span>usuń konto</button>
