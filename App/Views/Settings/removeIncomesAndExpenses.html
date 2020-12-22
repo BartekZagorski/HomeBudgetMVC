@@ -15,7 +15,9 @@
 <script>
     $(document).ready(function(){
         $(document).on("click", "button[type=button].confirm-remove", function(){
-            $("#remove-each-inc-and-exp").load('settings/delete-incomes-and-expenses');
+            $("#remove-each-inc-and-exp").load('settings/delete-incomes-and-expenses',{
+                flag: true
+            });
             return false;
         });
 
