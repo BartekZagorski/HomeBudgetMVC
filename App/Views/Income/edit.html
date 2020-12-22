@@ -1,0 +1,93 @@
+<div class="card border-primary">
+    <div class="card-header bg-primary py-2 text-light text-center text-capitalize">
+        <h3 class="h5 m-0"><i class="icon-dollar"></i>edytuj przychód</h3>
+    </div>
+    <div class="card-body border-primary py-2">
+        <form action="/income/update" method="POST" id="formIncome">
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-money"></i></span>
+                </div>
+                <input type="number" name="amount" id="amount" step="0.01" class="form-control" placeholder="podaj kwotę" onfocus="this.placeholder=''" onblur="this.placeholder='podaj kwotę'" value="{{ income.amount }}" required>
+            </div>
+            {% if income.errors['amount'] is defined %}
+                <p class="mt-1 text-danger small">{{ income.errors['amount'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-calendar"></i></span>
+                </div>
+                <input type="date" name="date" id="date" class="form-control" min="2000-01-01" value="{{ income.date }}" required>
+            </div>
+            {% if income.errors['date'] is defined %}
+                <p class="mt-1 text-danger small">{{ income.errors['date'] }}</p>
+            {% endif %}
+            <div class="input-group mt-3">
+                <select class="form-control" name="cattegory" required>
+                    <option value="" disabled selected hidden>Wybierz Kategorię</option>
+                    {% for cattegory in cattegories %}
+                        <option value="{{ cattegory.name }}" {% if cattegory.name == income.cattegory %} selected {% endif %} >{{ cattegory.name }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text px-2"><i class="icon-edit"></i></span>
+                </div>
+                <input type="text" name="comment" id="comment" class="form-control" value="{{ income.comment }}"
+                >
+            </div>
+            {% if income.errors['comment'] is defined %}
+                <p class="mt-1 text-danger small">{{ income.errors['comment'] }}</p>
+            {% endif %}
+            <div class="d-flex justify-content-around">
+                <button type="submit" class="btn btn-outline-success mt-3" name="{{ income.id }}"><i class="icon-plus-circled"></i>zatwierdź</button>
+                <button type="button" class="btn btn-outline-danger mt-3" data-dismiss="modal"><i class="icon-cancel-circled"></i>anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+
+$(document).ready(function(){
+    $(document).on("submit", "#formIncome", function() {
+
+        let id = parseInt($("button[type=submit]").attr("name"));
+        let amount = $("input[name=amount]").val();
+        let date = $("input[name=date]").val();
+        let cattegory = $("select").val();
+        if ($("input[name=comment]").val() != '')
+        {
+            let comment = $("input[name=comment]").val();
+            var data = [
+            {
+                "id": id,
+                "amount": amount,
+                "date": date,
+                "cattegory": cattegory,
+                "comment": comment
+            }
+        ]
+        }
+        else
+        {
+            var data = [
+                {
+                    "id": id,
+                    "amount": amount,
+                    "date": date,
+                    "cattegory": cattegory
+                }
+            ]
+        }
+        $("#edit-inc").load('/income/update', data[0]);
+        
+        return false;
+    });
+});
+
+
+</script>

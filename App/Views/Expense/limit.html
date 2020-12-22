@@ -1,0 +1,13 @@
+{% if cattegory.is_set_limit %}
+<div class="row m-0 small {{ background }} rounded mt-3">
+    <div class="col-lg-4 d-flex justify-content-center align-items-start">
+        <p class="my-1">Limit kategorii: {{ cattegory.cattegory_limit }}</p>     
+    </div>
+    <div class="col-lg-4 d-flex justify-content-center align-items-start">
+        <p class="my-1">Suma dotychczasowych wydatków: {{ cattegory.sumOfExpenses }}</p>     
+    </div>
+    <div class="col-lg-4 d-flex justify-content-center align-items-start">
+        <p class="my-1">Suma wydatków z uwzględnieniem bieżącego: {{ cattegory.sumAfterAddExpense }}</p>     
+    </div>
+</div>
+{% endif %}

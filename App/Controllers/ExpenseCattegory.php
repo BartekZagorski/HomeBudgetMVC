@@ -96,4 +96,10 @@ class ExpenseCattegory extends Authenticated
         }
         
     }
+
+    public function getLimitAction()
+    {     
+        $cattegory = Cattegory::findByName($_POST['cattegory']);
+        var_dump($cattegory);
+    }
 }

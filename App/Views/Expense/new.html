@@ -3,30 +3,25 @@
 {% block footer %}
 
     <script src="/js/defDate.js"></script>
+    <script src="/js/cattegoryLimit.js"></script>
 
     <script>
-                    let today = new Date();
-                    let date = new Date(today.getFullYear(), today.getMonth()+1, 0);
-                    let yr = date.getFullYear();
-                    let month = date.getMonth() < 9 ? '0' + (date.getMonth()+1) : date.getMonth()+1;
-                    let day = date.getDate()  < 10 ? '0' + date.getDate()  : date.getDate();
-                    let lastDayOfThisMonth = yr + '-' + month + '-' + day;
-                    $("#date").attr("max", lastDayOfThisMonth);
-    </script>
 
-    <script>
-        function cattegoryLimit(){ 
-            $("#info-cattegory").load("/Expense/cattegory-info", {
-               cattegory: $("#cattegory").val(),
-               date: $("#date").val(),
-               amount: $("#amount").val(),
-            });
-        }
         $(document).ready(function(){
-            $("#cattegory").change(cattegoryLimit);
-            $("#date").change(cattegoryLimit);
-            $("#amount").change(cattegoryLimit);
+
+            let today = new Date();
+            let date = new Date(today.getFullYear(), today.getMonth()+1, 0);
+            let yr = date.getFullYear();
+            let month = date.getMonth() < 9 ? '0' + (date.getMonth()+1) : date.getMonth()+1;
+            let day = date.getDate()  < 10 ? '0' + date.getDate()  : date.getDate();
+            let lastDayOfThisMonth = yr + '-' + month + '-' + day;
+            $("#date").attr("max", lastDayOfThisMonth);
+
         });
+       
+        
+
+        
     </script>
 
 {% endblock %}
@@ -34,9 +29,9 @@
 {% block main %}
 
 <article id="main-content" class="py-3 height-navbar">
-    <div class="container-fluid">
-        <div class="row align-items-start justify-content-end">
-            <div class="col-md-7 py-4">
+    <div class="container">
+        <div class="row align-items-start justify-content-center">
+            <div class="col-md-8 py-4">
                 <div class="card border-primary">
                     <div class="card-header bg-primary py-2 text-light text-center text-capitalize">
                         <h3 class="h5 m-0"><i class="icon-basket"></i>dodaj wydatek</h3>
@@ -66,7 +61,7 @@
                                 <select class="form-control" name="method" required>
                                     <option value="" disabled selected hidden>Wybierz Sposób Płatności</option>
                                     {% for method in methods %}
-                                        <option value="{{ method.name }}">{{ method.name }}</option>
+                                        <option value="{{ method.name }}" {% if method.name == expense.method %} selected {% endif %}>{{ method.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -75,10 +70,13 @@
                                 <select class="form-control" id="cattegory" name="cattegory" required>
                                     <option value="" disabled selected hidden>Wybierz Kategorię</option>
                                     {% for cattegory in cattegories %}
-                                        <option value="{{ cattegory.name }}">{{ cattegory.name }}</option>
+                                        <option value="{{ cattegory.name }}" {% if cattegory.name == expense.cattegory %} selected {% endif %}>{{ cattegory.name }}</option>
                                     {% endfor %}
                                 </select>
+                                <div class="input-group" id="cattegory-limit"></div>
                             </div>
+                            
+                            
                             <div class="input-group mt-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text px-2"><i class="icon-edit"></i></span>
@@ -97,9 +95,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-3 py-4" id="info-cattegory">
-                                
             </div>
         </div>
     </div>

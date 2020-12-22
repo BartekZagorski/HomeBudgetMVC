@@ -82,4 +82,60 @@ class Expense extends Authenticated
         }
         
     }
+
+    public function editAction()
+    {
+        $id = $_POST["id"];
+        $expense = ExpModel::findById($id);
+        if ($expense)
+        {
+            $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+            $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
+            View::renderTemplate('Expense/edit.html', [
+                'expense' => $expense,
+                'cattegories' => $expenseCattegories,
+                'methods' => $paymentMethods
+            ]);
+        }
+    }
+
+    public function updateAction()
+    {
+        $expense = new ExpModel($_POST);
+
+        if ($expense->update())
+        {
+            View::renderTemplate('Settings/success.html',
+            [
+                'message' => "edycja przebiegła pomyślnie!"
+            ]);
+        }
+        else
+        {
+            $expenseCattegories = ExpenseCattegory::getExpenseCattegoriesAssignedToUser($_SESSION['user_id']);
+            $paymentMethods = PaymentMethod::getPaymentMethodsAssignedToUSer($_SESSION['user_id']);
+            View::renderTemplate('Expense/edit.html', [
+                'expense' => $expense,
+                'cattegories' => $expenseCattegories,
+                'methods' => $paymentMethods
+            ]);
+        }
+
+    }
+
+    public function getLimitAction()
+    {     
+        $cattegory = ExpenseCattegory::findByName($_POST['cattegory']);
+        $cattegory->sumOfExpenses = ExpenseCattegory::getSumOfAmountInRequestedMonth($_POST['date'], $cattegory->name, $_POST["expenseId"]);
+        $amount  = floatval($_POST['amount']);
+        $cattegory->sumAfterAddExpense = $amount + $cattegory->sumOfExpenses;
+        $cattegory->sumAfterAddExpense > $cattegory->cattegory_limit ? $background = "bg-danger" : $background = "bg-success";        
+        View::renderTemplate('Expense/limit.html',
+        [
+            'cattegory' => $cattegory,
+            'background' => $background
+        ]
+        );
+    }
+
 }

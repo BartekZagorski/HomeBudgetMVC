@@ -175,7 +175,7 @@
                                         <td>{{ expense.date_of_expense|date("d-m-Y") }}</td>
                                         <td>{{ expense.expense_comment }}</td>
                                         <td>
-                                            <button type="button" class="p-0 btn btn-primary text-light edit-expense"  title="edytuj wydatek"><i class="icon-edit"></i></button>
+                                            <button type="button" class="p-0 btn btn-primary text-light edit-expense" name="{{ expense.ID }}" title="edytuj wydatek" data-toggle="modal" data-target="#edit-expense"><i class="icon-edit"></i></button>
                                             <button type="button" class="p-0 btn btn-danger text-light remove-expense" name="{{ expense.ID }}" title="usuń wydatek" data-toggle="modal" data-target="#remove-expense"><i class="icon-trash"></i></button>
                                         </td>
                                     </tr>
@@ -207,24 +207,32 @@
     </div> 
 </div>
 
-
-<div class="modal bd-example-modal-sm fade" id="edit-income">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="edit-inc">lalala</div>
+<span class="modals">
+    <div class="modal bd-example-modal-sm fade" id="edit-income">
+        <div class="modal-dialog">
+            <div class="modal-content" id="edit-inc"></div>
+        </div>
     </div>
-</div>
 
-<div class="modal bd-example-modal-sm fade" id="remove-income">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="remove-inc"></div>
+    <div class="modal bd-example-modal-sm fade" id="edit-expense">
+        <div class="modal-dialog">
+            <div class="modal-content" id="edit-exp"></div>
+        </div>
     </div>
-</div>
+    
+    <div class="modal bd-example-modal-sm fade" id="remove-income">
+        <div class="modal-dialog">
+            <div class="modal-content" id="remove-inc"></div>
+        </div>
+    </div>
+    
+    <div class="modal bd-example-modal-sm fade" id="remove-expense">
+        <div class="modal-dialog">
+            <div class="modal-content" id="remove-exp"></div>
+        </div>
+    </div>
+</span>
 
-<div class="modal bd-example-modal-sm fade" id="remove-expense">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content" id="remove-exp"></div>
-    </div>
-</div>
 
 <script>
 
@@ -234,6 +242,9 @@
 
     $(document).on("click", ".edit-income", function() {
         var id = $(this).attr("name");
+        $("#edit-inc").load('/income/edit', {
+            id: id
+        }); 
     });
 
     $(document).on("click", ".remove-income", function() {
@@ -250,7 +261,7 @@
         }); 
     });
 
-    $(document).on('hidden.bs.modal', function () {
+    $("span.modals").on('hidden.bs.modal', function () {
         $("#browseStatement").load("/browse-statement/render-statement",{
             header: header,
             beginDate: beginDate,
@@ -273,7 +284,10 @@
     });
 
     $(document).on("click", ".edit-expense", function() {
-        alert("edytuj");
+        var id = $(this).attr("name");
+        $("#edit-exp").load('/expense/edit', {
+            id: id
+        }); 
     });
 
 
