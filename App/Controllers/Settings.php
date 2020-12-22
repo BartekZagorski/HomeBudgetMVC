@@ -57,4 +57,26 @@ class Settings extends Authenticated
             'user' => $user
         ]);
     }
+
+    public function updateUserDataAction()
+    {
+        $user = Auth::getUser();
+        if ($user->update($_POST))
+        {
+            View::renderTemplate('Settings/success.html',[
+                'message' => "Zmiany zostały zapisane!"
+            ]);
+        }
+        else
+        {
+            View::renderTemplate('Settings/editUserData.html',[
+                'user' => $user
+            ]);
+        }
+    }
+
+    public function loadEditUser()
+    {
+        View::renderTemplate('Settings/editUser.html');
+    }
 }

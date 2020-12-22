@@ -20,43 +20,43 @@
     </div>   
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="edit-income-cattegory">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="edit-income-cattegory">
     <div class="modal-dialog">
         <div class="modal-content" id="edit-inc-cattegory"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="edit-expense-cattegory">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="edit-expense-cattegory">
     <div class="modal-dialog">
         <div class="modal-content" id="edit-exp-cattegory"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="edit-payment-method">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="edit-payment-method">
     <div class="modal-dialog">
         <div class="modal-content" id="edit-pay-method"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="remove-income-cattegory">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="remove-income-cattegory">
     <div class="modal-dialog">
         <div class="modal-content" id="remove-inc-cat"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="remove-expense-cattegory">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="remove-expense-cattegory">
     <div class="modal-dialog">
         <div class="modal-content" id="remove-exp-cat"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="remove-payment-method">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="remove-payment-method">
     <div class="modal-dialog">
         <div class="modal-content" id="remove-pay-met"></div>
     </div>
 </div>
 
-<div class="modal bd-example-modal-sm fade" id="edit-data">
+<div class="modal bd-example-modal-sm fade in" data-backdrop="static" id="edit-data">
     <div class="modal-dialog">
         <div class="modal-content" id="edit-user-data"></div>
     </div>
@@ -286,9 +286,9 @@
             $("#payment-methods-collapse").load('settings/load-payment-methods');
         });
 
-        $('button.edit-data').click(function(){
+        $(document).on('click', 'button.edit-data', function(){
             $("#edit-user-data").load('settings/edit-user-data');
-        })
+        });
 
     });
 
