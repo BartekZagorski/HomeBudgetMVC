@@ -49,36 +49,7 @@ class User extends \Core\Model
 
     public function validate()
     {
-        //login validation
-        if ($this->login == '')
-        {
-            $this->errors['login'] = "Login jest wymagany";
-        }
-        else if (strlen($this->login)<3 || strlen($this->login)>20)
-        {
-            $this->errors['login'] = "Login musi posiadać od 3 do 20 znaków";
-        }
-        else if (ctype_alnum($this->login)==false)
-        {
-            $this->errors['login'] = "Login może składać się tylko z liter i cyfr bez polskich znaków.";
-        }
-
-        if (static::loginExists($this->login, $this->id ?? null))
-        {
-            $this->errors['login'] = "Login $this->login jest już zajęty";
-        }
-
-        //email validation
-        $emailSafe = filter_var($this->email, FILTER_SANITIZE_EMAIL);
-        if ($emailSafe != $this->email || !(filter_var($emailSafe, FILTER_VALIDATE_EMAIL)))
-        {
-            $this->errors['email'] = "Niepoprawny adres email";
-        }
-
-        if (static::emailExists($this->email, $this->id ?? null))
-        {
-            $this->errors['email'] = "Email $this->email jest już zajęty";
-        }
+        $this->validateData();
 
         if (isset($this->password))
         {
@@ -99,6 +70,40 @@ class User extends \Core\Model
                 $this->errors['password'] = "Podane hasła nie są identyczne";
             }
         }
+    }
+
+    protected function validateData()
+    {
+         //login validation
+         if ($this->login == '')
+         {
+             $this->errors['login'] = "Login jest wymagany";
+         }
+         else if (strlen($this->login)<3 || strlen($this->login)>20)
+         {
+             $this->errors['login'] = "Login musi posiadać od 3 do 20 znaków";
+         }
+         else if (ctype_alnum($this->login)==false)
+         {
+             $this->errors['login'] = "Login może składać się tylko z liter i cyfr bez polskich znaków.";
+         }
+ 
+         if (static::loginExists($this->login, $this->id ?? null))
+         {
+             $this->errors['login'] = "Login $this->login jest już zajęty";
+         }
+ 
+         //email validation
+         $emailSafe = filter_var($this->email, FILTER_SANITIZE_EMAIL);
+         if ($emailSafe != $this->email || !(filter_var($emailSafe, FILTER_VALIDATE_EMAIL)))
+         {
+             $this->errors['email'] = "Niepoprawny adres email";
+         }
+ 
+         if (static::emailExists($this->email, $this->id ?? null))
+         {
+             $this->errors['email'] = "Email $this->email jest już zajęty";
+         }
     }
 
     public static function emailExists($email, $ignoreId = NULL)
@@ -353,4 +358,30 @@ class User extends \Core\Model
         return $stmt->execute();
     }
 
+
+    public function update($data)
+    {
+        $this->login = $data['login'];
+        $this->email = $data['email'];
+
+        $this->validateData();
+        if (empty($this->errors))
+        {
+            $sql = 'UPDATE users
+                    SET login = :login,
+                    email = :email
+                    WHERE id = :id';
+
+            $db = static::getDB();
+
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':login', $this->login, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            return $stmt -> execute();            
+        }
+        return false;
+    }
 }

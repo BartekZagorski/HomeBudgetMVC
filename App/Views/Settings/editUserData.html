@@ -3,7 +3,7 @@
         <h3 class="h5 m-0">Edytuj swoje dane</h3>
     </div>
     <div class="card-body border-primary py-3">
-        <form action="/settings/update-user-data" method="post" id="formRegister">
+        <form action="/settings/update-user-data" method="post" id="formUserEdit">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text px-2">
@@ -31,3 +31,23 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(document).on("submit", "#formUserEdit", function(){
+            var login = $("#login").val();
+            var email = $("#email").val();
+            $("#edit-user-data").load('settings/update-user-data',{
+                login: login,
+                email: email
+            });
+            return false;
+        });
+
+        $('#edit-data').on('hidden.bs.modal', function () {
+            $("#user-edit-collapse").load('settings/load-edit-user');
+        });
+    });
+
+
+</script>
