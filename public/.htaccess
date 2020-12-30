@@ -1,6 +1,10 @@
 # Remove the question mark from the request but maintain the query string
 RewriteEngine On
 
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://homebudget.bartlomiejzagorski.pl%{REQUEST_URI} [L,NE,R=301]
+
 # Uncomment the following line if your public folder isn't the web server's root
 # RewriteBase /
 
